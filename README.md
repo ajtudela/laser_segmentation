@@ -137,4 +137,3 @@ Segmentation of the laserscans.
 [sensor_msgs/LaserScan]: http://docs.ros.org/api/sensor_msgs/html/msg/LaserScan.html
 [slg_msgs/SegmentArray]: https://github.com/ajtudela/slg_msgs/blob/-/msg/SegmentArray.msg
 [visualization_msgs/MarkerArray]: http://docs.ros.org/api/visualization_msgs/html/msg/MarkerArray.html
-segments_names_viz
