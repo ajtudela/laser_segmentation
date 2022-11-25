@@ -38,7 +38,6 @@ class laserSegmentation: public rclcpp::Node{
 	private:
 		rclcpp::Publisher<slg_msgs::msg::SegmentArray>::SharedPtr segment_pub_;
 		rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr segment_viz_points_pub_;
-		rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr segment_viz_id_pub_;
 		rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
 
 		OnSetParametersCallbackHandle::SharedPtr callback_handle_;

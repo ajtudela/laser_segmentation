@@ -1,0 +1,15 @@
+segmentation:
+  ros__parameters:
+    distance_threshold: 0.05
+    max_avg_distance_from_sensor: 1.5
+    max_points_segment: 50
+    max_segment_width: 0.4
+    method_threshold: ''
+    min_avg_distance_from_sensor: 0.05
+    min_points_segment: 3
+    min_segment_width: 0.05
+    noise_reduction: 0.3
+    restore_defaults: false
+    scan_topic: scan_filtered
+    segmentation_type: jump_distance_merge
+    segments_topic: segments

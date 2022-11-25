@@ -27,21 +27,19 @@ The laser_segmentation package has been tested under [ROS2] Humble on [Ubuntu] 2
 - [Robot Operating System (ROS) 2](https://docs.ros.org/en/humble/) (middleware for robotics),
 - [slg_msgs](https://github.com/ajtudela/slg_msgs) (Library and messages to interact with laser related geometry - use Humble branch),
 
-		rosdep install -i --from-path src --rosdistro humble -y
-
 #### Building
 
 To build from source, clone the latest version from the main repository into your catkin workspace and compile the package using
 
 	cd colcon_workspace/src
-	git clone https://github.com/ajtudela/laser_segmentation.git
+	git clone https://github.com/ajtudela/laser_segmentation.git -b humble
 	cd ../
 	rosdep install -i --from-path src --rosdistro humble -y
-	colcon build
+	colcon build --symlink-install
 
 ## Usage
 
-Run the laser_segmentation node with:
+With some scan source running, run the laser_segmentation node with:
 	ros2 launch laser_segmentation laser_segmentation.launch
 
 ## Nodes
@@ -64,11 +62,13 @@ Segmentation of the laserscans.
 
 * **`segments_viz`** ([visualization_msgs/MarkerArray])
 
-	3d markers of the segments for showing the segments in [Rviz2].
+	It comprises three namespaces:
 
-* **`segments_id_viz`** ([visualization_msgs/MarkerArray])
+	- "segments": 3d markers of the segments for showing the segments in [Rviz2].
 
-	3d markers with the id of the segments.
+	- "segments_names": 3d markers with the id of the segments.
+
+	- "centroids": 3d markers of the segment centroids in [Rviz2].
 
 #### Parameters
 
