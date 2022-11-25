@@ -69,6 +69,10 @@ install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}/
 )
 
+install(DIRECTORY params
+  DESTINATION share/${PROJECT_NAME}/
+)
+
 #############
 ## Testing ##
 #############

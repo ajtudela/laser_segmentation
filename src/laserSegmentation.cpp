@@ -47,7 +47,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 							.set__floating_point_range({rcl_interfaces::msg::FloatingPointRange()
 								.set__from_value(0.0)
 								.set__to_value(1.0)
-								.set__step(0.1)}
+								.set__step(0.01)}
 								));
 	this->get_parameter("min_avg_distance_from_sensor", min_avg_distance_from_sensor_);
 	RCLCPP_INFO(this->get_logger(), "The parameter min_avg_distance_from_sensor is set to: [%f]", min_avg_distance_from_sensor_);
@@ -58,7 +58,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 							.set__floating_point_range({rcl_interfaces::msg::FloatingPointRange()
 								.set__from_value(0.0)
 								.set__to_value(50.0)
-								.set__step(1.0)}
+								.set__step(0.01)}
 							));
 	this->get_parameter("max_avg_distance_from_sensor", max_avg_distance_from_sensor_);
 	RCLCPP_INFO(this->get_logger(), "The parameter max_avg_distance_from_sensor is set to: [%f]", max_avg_distance_from_sensor_);
@@ -69,7 +69,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 							.set__floating_point_range({rcl_interfaces::msg::FloatingPointRange()
 								.set__from_value(0.0)
 								.set__to_value(5.0)
-								.set__step(0.1)}
+								.set__step(0.01)}
 							));
 	this->get_parameter("min_segment_width",            min_segment_width_);
 	RCLCPP_INFO(this->get_logger(), "The parameter min_segment_width is set to: [%f]", min_segment_width_);
@@ -80,7 +80,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 							.set__floating_point_range({rcl_interfaces::msg::FloatingPointRange()
 								.set__from_value(0.0)
 								.set__to_value(100.0)
-								.set__step(1.0)}
+								.set__step(0.1)}
 							));
 	this->get_parameter("max_segment_width",            max_segment_width_);
 	RCLCPP_INFO(this->get_logger(), "The parameter max_segment_width is set to: [%f]", max_segment_width_);
@@ -91,7 +91,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 							.set__floating_point_range({rcl_interfaces::msg::FloatingPointRange()
 								.set__from_value(0.0)
 								.set__to_value(2.0)
-								.set__step(0.1)}
+								.set__step(0.01)}
 							));
 	this->get_parameter("distance_threshold",           distance_thres_);
 	RCLCPP_INFO(this->get_logger(), "The parameter distance_threshold is set to: [%f]", distance_thres_);
@@ -156,7 +156,6 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 	// Publishers
 	segment_pub_              = this->create_publisher<slg_msgs::msg::SegmentArray>(seg_topic_, 1);
 	segment_viz_points_pub_   = this->create_publisher<visualization_msgs::msg::MarkerArray>("segments_viz", 10);
-	segment_viz_id_pub_       = this->create_publisher<visualization_msgs::msg::MarkerArray>("segments_id_viz", 10);
 
 	// Subscribers
 	auto default_qos = rclcpp::QoS(rclcpp::SystemDefaultsQoS());
@@ -230,12 +229,11 @@ rcl_interfaces::msg::SetParametersResult laserSegmentation::parameters_callback(
 /* Callback function */
 void laserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan_msg){
 	// Note: Only perform laserscan segmentation if there's any subscriber
-	if (segment_pub_->get_subscription_count() == 0 && 
-		segment_viz_id_pub_->get_subscription_count() == 0 && 
+	if (segment_pub_->get_subscription_count() == 0 &&  
 		segment_viz_points_pub_->get_subscription_count() == 0){
 		return;
 	}
-	RCLCPP_INFO_ONCE(this->get_logger(), "Subscribed to laser scan topic: %s]", scan_topic_.c_str());
+	RCLCPP_INFO_ONCE(this->get_logger(), "Subscribed to laser scan topic: [%s]", scan_topic_.c_str());
 
 	// Read the laser scan
 	std::vector<slg::Point2D> point_list;
@@ -296,6 +294,11 @@ void laserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
 
 /* Show the segments in rviz */
 void laserSegmentation::show_visualization(std_msgs::msg::Header header, std::vector<slg::Segment2D> segment_list){
+	// Note: Only perform visualization if there's any subscriber
+	if (segment_viz_points_pub_->get_subscription_count() == 0){
+		return;
+	}	
+	
 	/* Create a marker point */
 	visualization_msgs::msg::MarkerArray viz_point_array;
 	visualization_msgs::msg::Marker viz_point;
@@ -307,8 +310,22 @@ void laserSegmentation::show_visualization(std_msgs::msg::Header header, std::ve
 	viz_point.scale.x = 0.02;
 	viz_point.scale.y = 0.02;
 
+	/* Create a marker centroid */
+	visualization_msgs::msg::Marker viz_centroids;
+	viz_centroids.header = header;
+	viz_centroids.lifetime = rclcpp::Duration(0, 10);
+	viz_centroids.ns = "centroids";
+	viz_centroids.type = visualization_msgs::msg::Marker::CUBE;
+	viz_centroids.action = visualization_msgs::msg::Marker::ADD;
+	viz_centroids.scale.x = 0.05;
+	viz_centroids.scale.y = 0.05;
+	viz_centroids.scale.z = 0.05;
+    viz_centroids.pose.orientation.x = 0.0;
+    viz_centroids.pose.orientation.y = 0.0;
+    viz_centroids.pose.orientation.z = 0.0;
+    viz_centroids.pose.orientation.w = 1.0;
+
 	/* Create a marker id text */
-	visualization_msgs::msg::MarkerArray viz_text_array;
 	visualization_msgs::msg::Marker viz_text;
 	viz_text.header = header;
 	viz_text.lifetime = rclcpp::Duration(0, 10);
@@ -332,16 +349,17 @@ void laserSegmentation::show_visualization(std_msgs::msg::Header header, std::ve
 
 	// Push the deletion marker
 	viz_point_array.markers.push_back(deletion_marker);
-	viz_text_array.markers.push_back(deletion_marker);
-
+	
 	/* Show the segments and the id */
 	for (std::vector<slg::Segment2D>::size_type i = 0; i < segment_list.size(); i++){
 		slg::Segment2D current_segment = segment_list[i];
 		viz_point.id = i;
 		viz_text.id = i;
+		viz_centroids.id = i;
 
 		// Change the color of the segment
 		viz_point.color = get_palette_color(i);
+		viz_centroids.color = get_palette_color(i);
 
 		// Iterate over the points of the segment
 		for (slg::Point2D point: current_segment.get_points()){
@@ -354,16 +372,19 @@ void laserSegmentation::show_visualization(std_msgs::msg::Header header, std::ve
 		viz_text.pose.position.y = current_segment.centroid().y;
 		viz_text.pose.position.z = 0.05;
 
+		// Place centroid under text
+		viz_centroids.pose.position = viz_text.pose.position;
+
 		// Push to arrays
 		viz_point_array.markers.push_back(viz_point);
-		viz_text_array.markers.push_back(viz_text);
+		viz_point_array.markers.push_back(viz_centroids);
+		viz_point_array.markers.push_back(viz_text);
 
 		// Clear markers
 		viz_point.points.clear();
 	}
 	// Publish visualization
 	segment_viz_points_pub_->publish(viz_point_array);
-	segment_viz_id_pub_->publish(viz_text_array);
 }
 
 /* Get Parula color of the class */
