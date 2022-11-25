@@ -30,6 +30,7 @@ find_package(slg_msgs REQUIRED) # formerly simple_laser_geometry
 ## Your package locations should be listed before other locations
 include_directories(
   include
+  ${slg_msgs_INCLUDE_DIRS}
 )
 
 # executable node
