@@ -27,7 +27,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 								.set__step(1)}
 								));
 	this->get_parameter("min_points_segment", min_points_);
-	RCLCPP_INFO(this->get_logger(), "The parameter min_points_segment is set to: %d", min_points_);
+	RCLCPP_INFO(this->get_logger(), "The parameter min_points_segment is set to: [%d]", min_points_);
 
 	nav2_util::declare_parameter_if_not_declared(this, "max_points_segment", rclcpp::ParameterValue(200), 
 							rcl_interfaces::msg::ParameterDescriptor()
@@ -38,7 +38,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 								.set__step(1)}
 								));
 	this->get_parameter("max_points_segment", max_points_);
-	RCLCPP_INFO(this->get_logger(), "The parameter max_points_segment is set to: %d", max_points_);
+	RCLCPP_INFO(this->get_logger(), "The parameter max_points_segment is set to: [%d]", max_points_);
 
 	// FLOAT PARAMS ..........................................................................
 	nav2_util::declare_parameter_if_not_declared(this, "min_avg_distance_from_sensor", rclcpp::ParameterValue(0.0), 
@@ -50,7 +50,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 								.set__step(0.1)}
 								));
 	this->get_parameter("min_avg_distance_from_sensor", min_avg_distance_from_sensor_);
-	RCLCPP_INFO(this->get_logger(), "The parameter min_avg_distance_from_sensor is set to: %f", min_avg_distance_from_sensor_);
+	RCLCPP_INFO(this->get_logger(), "The parameter min_avg_distance_from_sensor is set to: [%f]", min_avg_distance_from_sensor_);
 
 	nav2_util::declare_parameter_if_not_declared(this, "max_avg_distance_from_sensor", rclcpp::ParameterValue(20.0), 
 							rcl_interfaces::msg::ParameterDescriptor()
@@ -61,7 +61,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 								.set__step(1.0)}
 							));
 	this->get_parameter("max_avg_distance_from_sensor", max_avg_distance_from_sensor_);
-	RCLCPP_INFO(this->get_logger(), "The parameter max_avg_distance_from_sensor is set to: %f", max_avg_distance_from_sensor_);
+	RCLCPP_INFO(this->get_logger(), "The parameter max_avg_distance_from_sensor is set to: [%f]", max_avg_distance_from_sensor_);
 
 	nav2_util::declare_parameter_if_not_declared(this, "min_segment_width", rclcpp::ParameterValue(0.20), 
 							rcl_interfaces::msg::ParameterDescriptor()
@@ -72,7 +72,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 								.set__step(0.1)}
 							));
 	this->get_parameter("min_segment_width",            min_segment_width_);
-	RCLCPP_INFO(this->get_logger(), "The parameter min_segment_width is set to: %f", min_segment_width_);
+	RCLCPP_INFO(this->get_logger(), "The parameter min_segment_width is set to: [%f]", min_segment_width_);
 
 	nav2_util::declare_parameter_if_not_declared(this, "max_segment_width", rclcpp::ParameterValue(10.0), 
 							rcl_interfaces::msg::ParameterDescriptor()
@@ -83,7 +83,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 								.set__step(1.0)}
 							));
 	this->get_parameter("max_segment_width",            max_segment_width_);
-	RCLCPP_INFO(this->get_logger(), "The parameter max_segment_width is set to: %f", max_segment_width_);
+	RCLCPP_INFO(this->get_logger(), "The parameter max_segment_width is set to: [%f]", max_segment_width_);
 
 	nav2_util::declare_parameter_if_not_declared(this, "distance_threshold", rclcpp::ParameterValue(0.30), 
 							rcl_interfaces::msg::ParameterDescriptor()
@@ -94,7 +94,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 								.set__step(0.1)}
 							));
 	this->get_parameter("distance_threshold",           distance_thres_);
-	RCLCPP_INFO(this->get_logger(), "The parameter distance_threshold is set to: %f", distance_thres_);
+	RCLCPP_INFO(this->get_logger(), "The parameter distance_threshold is set to: [%f]", distance_thres_);
 
 	nav2_util::declare_parameter_if_not_declared(this, "noise_reduction", rclcpp::ParameterValue(0.30), 
 							rcl_interfaces::msg::ParameterDescriptor()
@@ -105,39 +105,39 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 								.set__step(0.1)}
 							));
 	this->get_parameter("noise_reduction",              noise_reduction_);
-	RCLCPP_INFO(this->get_logger(), "The parameter noise_reduction is set to: %f", noise_reduction_);
+	RCLCPP_INFO(this->get_logger(), "The parameter noise_reduction is set to: [%f]", noise_reduction_);
 
 	// BOOLEAN PARAMS ..........................................................................
 	nav2_util::declare_parameter_if_not_declared(this, "restore_defaults", rclcpp::ParameterValue(false), 
 							rcl_interfaces::msg::ParameterDescriptor()
 							.set__description("Restore to the original configuration"));
 	this->get_parameter("restore_defaults", restore_);
-	RCLCPP_INFO(this->get_logger(), "The parameter restore_defaults is set to: %s", restore_ ? "true" : "false");
+	RCLCPP_INFO(this->get_logger(), "The parameter restore_defaults is set to: [%s]", restore_ ? "true" : "false");
 
 	// STRING PARAMS ..........................................................................
 	nav2_util::declare_parameter_if_not_declared(this, "method_threshold", rclcpp::ParameterValue(""), 
 							rcl_interfaces::msg::ParameterDescriptor()
 							.set__description("Method to calculate a dynamic jump distance threshold in jump_distance algorithm"));
 	this->get_parameter("method_threshold", method_thres_);
-	RCLCPP_INFO(this->get_logger(), "The parameter method_threshold is set to: %s", method_thres_.c_str());
+	RCLCPP_INFO(this->get_logger(), "The parameter method_threshold is set to: [%s]", method_thres_.c_str());
 
 	nav2_util::declare_parameter_if_not_declared(this, "scan_topic", rclcpp::ParameterValue("scan"), 
 							rcl_interfaces::msg::ParameterDescriptor()
-							.set__description("Laser topic to read"));
+							.set__description("Laser topic to read]"));
 	this->get_parameter("scan_topic", scan_topic_);
-	RCLCPP_INFO(this->get_logger(), "The parameter scan_topic is set to: %s", scan_topic_.c_str());
+	RCLCPP_INFO(this->get_logger(), "The parameter scan_topic is set to: [%s]", scan_topic_.c_str());
 	
 	nav2_util::declare_parameter_if_not_declared(this, "segments_topic", rclcpp::ParameterValue("segments"), 
 							rcl_interfaces::msg::ParameterDescriptor()
 							.set__description("published Segements topic"));
 	this->get_parameter("segments_topic", seg_topic_);
-	RCLCPP_INFO(this->get_logger(), "The parameter segment_topic is set to: %s", seg_topic_.c_str());
+	RCLCPP_INFO(this->get_logger(), "The parameter segment_topic is set to: [%s]", seg_topic_.c_str());
 
 	nav2_util::declare_parameter_if_not_declared(this, "segmentation_type", rclcpp::ParameterValue("jump_distance"), 
 							rcl_interfaces::msg::ParameterDescriptor()
 							.set__description("Type of segmentation"));
 	this->get_parameter("segmentation_type", segmentation_type_);
-	RCLCPP_INFO(this->get_logger(), "The parameter segmentation_type is set to: %s", segmentation_type_.c_str());
+	RCLCPP_INFO(this->get_logger(), "The parameter segmentation_type is set to: [%s]", segmentation_type_.c_str());
 
 	// Callback for monitor changes in parameters
 	callback_handle_ = this->add_on_set_parameters_callback(
@@ -149,7 +149,7 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 	}else if(segmentation_type_ == "jump_distance_merge"){
 		segmentation_.reset(new JumpDistanceSegmentationMerge);
 	}else{
-		RCLCPP_FATAL(this->get_logger(), "Segmentation algorithm is invalid: %s", segmentation_type_.c_str());
+		RCLCPP_FATAL(this->get_logger(), "Segmentation algorithm is invalid: %s]", segmentation_type_.c_str());
 		return;
 	}
 	
@@ -178,49 +178,49 @@ rcl_interfaces::msg::SetParametersResult laserSegmentation::parameters_callback(
 		// INTEGER PARAMS ..........................................................................
 		if (param.get_name() == "min_points_segment" && param.get_type() == rclcpp::ParameterType::PARAMETER_INTEGER){
 				min_points_ = param.as_int();
-				RCLCPP_INFO(this->get_logger(), "The parameter min_points_segment is set to: %d", min_points_);
+				RCLCPP_INFO(this->get_logger(), "The parameter min_points_segment is set to: [%d]", min_points_);
 		}
 
 		if (param.get_name() == "max_points_segment" && param.get_type() == rclcpp::ParameterType::PARAMETER_INTEGER){
 				max_points_ = param.as_int();
-				RCLCPP_INFO(this->get_logger(), "The parameter max_points_segment is set to: %d", max_points_);
+				RCLCPP_INFO(this->get_logger(), "The parameter max_points_segment is set to: [%d]", max_points_);
 		}
 		// FLOAT PARAMS ..........................................................................
 		if (param.get_name() == "min_avg_distance_from_sensor" && param.get_type() == rclcpp::ParameterType::PARAMETER_DOUBLE){
 				min_avg_distance_from_sensor_ = param.as_double ();
-				RCLCPP_INFO(this->get_logger(), "The parameter min_avg_distance_from_sensor is set to: %3.3f", min_avg_distance_from_sensor_);
+				RCLCPP_INFO(this->get_logger(), "The parameter min_avg_distance_from_sensor is set to: [%3.3f]", min_avg_distance_from_sensor_);
 		}
 
 		if (param.get_name() == "max_avg_distance_from_sensor" && param.get_type() == rclcpp::ParameterType::PARAMETER_DOUBLE){
 				max_avg_distance_from_sensor_ = param.as_double ();
-				RCLCPP_INFO(this->get_logger(), "The parameter max_avg_distance_from_sensor is set to: %3.3f", max_avg_distance_from_sensor_);
+				RCLCPP_INFO(this->get_logger(), "The parameter max_avg_distance_from_sensor is set to: [%3.3f]", max_avg_distance_from_sensor_);
 		}		
 		
 		if (param.get_name() == "min_segment_width" && param.get_type() == rclcpp::ParameterType::PARAMETER_DOUBLE){
 				min_segment_width_ = param.as_double ();
-				RCLCPP_INFO(this->get_logger(), "The parameter min_segment_width is set to: %3.3f", min_segment_width_);
+				RCLCPP_INFO(this->get_logger(), "The parameter min_segment_width is set to: [%3.3f]", min_segment_width_);
 		}
 
 		if (param.get_name() == "max_segment_width" && param.get_type() == rclcpp::ParameterType::PARAMETER_DOUBLE){
 				max_segment_width_ = param.as_double ();
-				RCLCPP_INFO(this->get_logger(), "The parameter max_segment_width is set to: %3.3f", max_segment_width_);
+				RCLCPP_INFO(this->get_logger(), "The parameter max_segment_width is set to: [%3.3f]", max_segment_width_);
 		}
 
 		if (param.get_name() == "distance_threshold" && param.get_type() == rclcpp::ParameterType::PARAMETER_DOUBLE){
 				distance_thres_ = param.as_double ();
-				RCLCPP_INFO(this->get_logger(), "The parameter distance_threshold is set to: %3.3f", distance_thres_);
+				RCLCPP_INFO(this->get_logger(), "The parameter distance_threshold is set to: [%3.3f]", distance_thres_);
 		}
 
 		if (param.get_name() == "noise_reduction" && param.get_type() == rclcpp::ParameterType::PARAMETER_DOUBLE){
 				distance_thres_ = param.as_double ();
-				RCLCPP_INFO(this->get_logger(), "The parameter noise_reduction is set to: %3.3f", noise_reduction_);
+				RCLCPP_INFO(this->get_logger(), "The parameter noise_reduction is set to: [%3.3f]", noise_reduction_);
 		}
 
 		// STRING PARAMS ..........................................................................
 		this->get_parameter("method_threshold", method_thres_);
 		if (param.get_name() == "method_threshold" && param.get_type() == rclcpp::ParameterType::PARAMETER_STRING){
 				method_thres_ = param.as_string();
-				RCLCPP_INFO(this->get_logger(), "The parameter method_threshold is set to: %s", method_thres_.c_str());
+				RCLCPP_INFO(this->get_logger(), "The parameter method_threshold is set to: [%s]", method_thres_.c_str());
 		}
 	}
 
@@ -235,7 +235,7 @@ void laserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
 		segment_viz_points_pub_->get_subscription_count() == 0){
 		return;
 	}
-	RCLCPP_INFO_ONCE(this->get_logger(), "Subscribed to laser scan topic: %s", scan_topic_.c_str());
+	RCLCPP_INFO_ONCE(this->get_logger(), "Subscribed to laser scan topic: %s]", scan_topic_.c_str());
 
 	// Read the laser scan
 	std::vector<slg::Point2D> point_list;
