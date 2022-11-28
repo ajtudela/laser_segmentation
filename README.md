@@ -1,5 +1,6 @@
 # laser_segmentation
 ![ROS2](https://img.shields.io/badge/ros2-humble-blue?logo=ros&logoColor=white)
+![License](https://img.shields.io/badge/license-MIT-green)
 
 ## Overview
 
@@ -40,7 +41,7 @@ To build from source, clone the latest version from the main repository into you
 ## Usage
 
 With some scan source running, run the laser_segmentation node with:
-	ros2 launch laser_segmentation laser_segmentation.launch
+	ros2 launch laser_segmentation segmentation.launch.py
 
 ## Nodes
 

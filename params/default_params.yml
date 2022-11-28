@@ -10,7 +10,6 @@ segmentation:
     min_segment_width: 0.2
     noise_reduction: 0.3
     restore_defaults: false
-    #these three are always overwritten by launch file. Here for completeness
-    #scan_topic: scan
-    #segmentation_type: jump_distance_merge
-    #segments_topic: segments
+    scan_topic: scan
+    segmentation_type: jump_distance_merge
+    segments_topic: segments

@@ -2,6 +2,18 @@
 Changelog for package laser_segmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.0 (28-11-2022)
+------------------
+* Added include to find slg_msgs library.
+* Added launch with some non-default param values.
+* Minor changes to configuration info display.
+* Added params folder with two yaml config files.
+* Launch file now relies on config files, it is its only argument.
+* Minor changes to range values in laser_segmentation paramas to accept smaller granularity.
+* Added rviz CUBE marker with segment centroids.
+* Reunited all markers into a single topic, using three namespaces.
+* Added license.
+
 2.0.0 (15-10-2022)
 ------------------
 * First ROS2 (Humble) version.
