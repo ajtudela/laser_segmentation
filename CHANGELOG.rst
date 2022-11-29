@@ -2,6 +2,11 @@
 Changelog for package laser_segmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.1 (29-11-2022)
+------------------
+* Add hierarchy between segmentationJumpDistance and segmentationJumpDistanceMerge to avoid code redundancy.
+* Rise up centroids visualization.
+
 2.1.0 (28-11-2022)
 ------------------
 * Added include to find slg_msgs library.

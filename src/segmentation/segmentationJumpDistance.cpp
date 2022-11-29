@@ -86,11 +86,11 @@ bool JumpDistanceSegmentation::is_jump_between(const slg::Point2D point1, const 
 	double distance = (point2 - point1).length();
 	// Select the method to calculate a dynamic jump distance threshold
 	double new_jump_distance;
-	if (threshold_method_ == "Lee"){
+	if (threshold_method_ == "lee"){
 		new_jump_distance = calculate_lee_threshold(point1, point2);
-	}else if (threshold_method_ == "Diet"){
+	}else if (threshold_method_ == "diet"){
 		new_jump_distance = calculate_diet_threshold(point1, point2);
-	}else if (threshold_method_ == "Santos"){
+	}else if (threshold_method_ == "santos"){
 		new_jump_distance = calculate_santos_threshold(point1, point2);
 	}else{
 		new_jump_distance = jump_distance_;

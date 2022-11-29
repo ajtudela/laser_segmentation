@@ -22,7 +22,7 @@ class JumpDistanceSegmentation: public Segmentation{
 
 		typedef std::shared_ptr<JumpDistanceSegmentation>SharedPtr;
 
-	private:
+	protected:
 		// Checks if two adjacent points are close to each other.
 		bool is_jump_between(const slg::Point2D point1, const slg::Point2D point2);
 

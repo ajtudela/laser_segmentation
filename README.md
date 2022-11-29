@@ -85,7 +85,7 @@ Segmentation of the laserscans.
 
 	Choose between several segmentation algorithms. Jump distance clustering (`jump_distance`) and jump distance and merge (`jump_distance_merge`).
 
-#### Parameters for filtering available through dynamic reconfigure
+#### Parameters for filtering
 
 * **`min_points_segment`** (int, default: 3)
 
@@ -111,11 +111,11 @@ Segmentation of the laserscans.
 
 	Maximum width of the segment.
 
-#### Parameters for algorithms available through dynamic reconfigure
+#### Parameters for segmentation algorithms
 
 * **`method_threshold`** (string, default: "")
 
-	Method to calculate a dynamic jump distance threshold in jump_distance or jump_distance_merge algorithms. This value and methods are based on `lee` (Lee, 2001), `diet`(Dietmayer, et al., 2001) or `santos` (Santos, et al., 2003).
+	Method to calculate a dynamic jump distance threshold in jump_distance or jump_distance_merge algorithms. This value and methods are based on `lee` (Lee, 2001), `diet` (Dietmayer, et al., 2001) or `santos` (Santos, et al., 2003).
 
 * **`distance_threshold`** (double, default: 0.3)
 

@@ -370,12 +370,12 @@ void laserSegmentation::show_visualization(std_msgs::msg::Header header, std::ve
 
 		// Get position of the text
 		viz_text.text = std::to_string(current_segment.get_id());
-		viz_text.pose.position.x = current_segment.centroid().x;
-		viz_text.pose.position.y = current_segment.centroid().y;
-		viz_text.pose.position.z = 0.05;
+		viz_text.pose.position = current_segment.centroid();
+		viz_text.pose.position.z = 0.10;
 
 		// Place centroid under text
-		viz_centroids.pose.position = viz_text.pose.position;
+		viz_centroids.pose.position = current_segment.centroid();
+		viz_centroids.pose.position.z = 0.0;
 
 		// Push to arrays
 		viz_array.markers.push_back(viz_point);
