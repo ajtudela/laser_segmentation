@@ -17,6 +17,7 @@
 
 // ROS
 #include "rclcpp/rclcpp.hpp"
+#include "rclcpp/type_adapter.hpp"
 #include "rcl_interfaces/msg/set_parameters_result.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
@@ -27,11 +28,14 @@
 
 // LASER SEGMENTATION
 #include "laser_segmentation/parula.hpp"
+#include "laser_segmentation/scanToPointTypeAdapter.hpp"
 #include "laser_segmentation/segmentation/segmentation.hpp"
 #include "laser_segmentation/segmentation/segmentationJumpDistance.hpp"
 #include "laser_segmentation/segmentation/segmentationJumpDistanceMerge.hpp"
 
 class laserSegmentation: public rclcpp::Node{
+	using ScanToPointAdapedType = rclcpp::TypeAdapter<std::vector<slg::Point2D>, sensor_msgs::msg::LaserScan>;
+
 	public:
 		laserSegmentation();
 		~laserSegmentation();
