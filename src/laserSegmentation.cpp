@@ -216,7 +216,6 @@ rcl_interfaces::msg::SetParametersResult laserSegmentation::parameters_callback(
 		}
 
 		// STRING PARAMS ..........................................................................
-		this->get_parameter("method_threshold", method_thres_);
 		if (param.get_name() == "method_threshold" && param.get_type() == rclcpp::ParameterType::PARAMETER_STRING){
 				method_thres_ = param.as_string();
 				RCLCPP_INFO(this->get_logger(), "The parameter method_threshold is set to: [%s]", method_thres_.c_str());

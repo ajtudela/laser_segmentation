@@ -136,6 +136,6 @@ Segmentation of the laserscans.
 [Ubuntu]: https://ubuntu.com/
 [ROS2]: https://docs.ros.org/en/humble/
 [Rviz2]: https://github.com/ros2/rviz
-[sensor_msgs/LaserScan]: http://docs.ros.org/api/sensor_msgs/html/msg/LaserScan.html
+[sensor_msgs/LaserScan]: https://docs.ros2.org/humble/api/sensor_msgs/msg/LaserScan.html
 [slg_msgs/SegmentArray]: https://github.com/ajtudela/slg_msgs/blob/-/msg/SegmentArray.msg
-[visualization_msgs/MarkerArray]: http://docs.ros.org/api/visualization_msgs/html/msg/MarkerArray.html
+[visualization_msgs/MarkerArray]: https://docs.ros2.org/humble/api/visualization_msgs/msg/MarkerArray.html
