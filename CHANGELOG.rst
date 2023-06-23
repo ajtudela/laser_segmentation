@@ -2,6 +2,10 @@
 Changelog for package laser_segmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+2.1.2 (23-06-2023)
+------------------
+* Rename visualization topic.
+
 2.1.1 (29-11-2022)
 ------------------
 * Add hierarchy between segmentationJumpDistance and segmentationJumpDistanceMerge to avoid code redundancy.

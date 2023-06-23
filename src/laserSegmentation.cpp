@@ -155,7 +155,8 @@ laserSegmentation::laserSegmentation(): Node("laser_segmentation"), setup_(false
 	
 	// Publishers
 	segment_pub_              = this->create_publisher<slg_msgs::msg::SegmentArray>(seg_topic_, 1);
-	segment_viz_points_pub_   = this->create_publisher<visualization_msgs::msg::MarkerArray>("segments_viz", 10);
+	segment_viz_points_pub_   = this->create_publisher<visualization_msgs::msg::MarkerArray>(
+		seg_topic_ + "/visualization", 10);
 
 	// Subscribers
 	auto default_qos = rclcpp::QoS(rclcpp::SystemDefaultsQoS());

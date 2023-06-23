@@ -61,7 +61,7 @@ Segmentation of the laserscans.
 
 	Splitted segments resulting of the segmentation.
 
-* **`segments_viz`** ([visualization_msgs/MarkerArray])
+* **`segments/visualization`** ([visualization_msgs/MarkerArray])
 
 	It comprises three namespaces:
 
