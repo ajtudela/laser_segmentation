@@ -30,7 +30,7 @@ The laser_segmentation package has been tested under [ROS2] Humble on [Ubuntu] 2
 
 #### Building
 
-To build from source, clone the latest version from the main repository into your catkin workspace and compile the package using
+To build from source, clone the latest version from the main repository into your colcon workspace and compile the package using
 
 	cd colcon_workspace/src
 	git clone https://github.com/ajtudela/laser_segmentation.git -b humble
