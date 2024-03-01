@@ -6,7 +6,7 @@
   <description>Implementation of algorithms for segmentation of laserscans.</description>
   <maintainer email="ajtudela@gmail.com">Alberto J. Tudela Roldán</maintainer>
   <maintainer email="manolofc@gmail.com">Manuel Fernandez-Carmona</maintainer>
-  <license>MIT</license>
+  <license>Apache-2.0</license>
   <author email="ajtudela@gmail.com">Alberto J. Tudela Roldán</author>
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>rclcpp</depend>
@@ -15,8 +15,11 @@
   <depend>visualization_msgs</depend>
   <depend>nav2_util</depend>
   <depend>slg_msgs</depend>  <!-- formerly simple_laser_geometry -->
+
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+
   <export>
     <build_type>ament_cmake</build_type>
   </export>
