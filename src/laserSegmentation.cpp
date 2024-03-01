@@ -16,11 +16,8 @@
 
 #include "laser_segmentation/laserSegmentation.hpp"
 
-laserSegmentation::laserSegmentation(
-  const std::string & node_name,
-  const std::string & ns,
-  const rclcpp::NodeOptions & options)
-: rclcpp_lifecycle::LifecycleNode(node_name, ns, options), setup_(false)
+laserSegmentation::laserSegmentation(const rclcpp::NodeOptions & options)
+: rclcpp_lifecycle::LifecycleNode("laser_segmentation", "", options), setup_(false)
 {
 }
 
@@ -553,13 +550,5 @@ std_msgs::msg::ColorRGBA laserSegmentation::get_palette_color(unsigned int index
   return color;
 }
 
-int main(int argc, char ** argv)
-{
-  rclcpp::init(argc, argv);
-  rclcpp::executors::SingleThreadedExecutor exe;
-  auto node = std::make_shared<laserSegmentation>("laser_segmentation");
-  exe.add_node(node->get_node_base_interface());
-  exe.spin();
-  rclcpp::shutdown();
-  return 0;
-}
+#include "rclcpp_components/register_node_macro.hpp"
+RCLCPP_COMPONENTS_REGISTER_NODE(laserSegmentation)

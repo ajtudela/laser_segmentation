@@ -46,14 +46,9 @@ public:
   /**
    * @brief Construct a new laser Segmentation object
    *
-   * @param node_name Name for the node
-   * @param namespace Namespace for the node, if any
    * @param options Node options
    */
-  laserSegmentation(
-    const std::string & node_name,
-    const std::string & ns = "",
-    const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
+  explicit laserSegmentation(const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
 
   /**
    * @brief Destroy the laser Segmentation object

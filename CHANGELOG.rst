@@ -2,6 +2,13 @@
 Changelog for package laser_segmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.0 (XX-03-2024)
+------------------
+* Improve formatting.
+* Improve documentation of source.
+* Converted to Lifecycle node.
+* Converted to component.
+
 2.1.2 (23-06-2023)
 ------------------
 * Rename visualization topic.
