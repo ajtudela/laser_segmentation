@@ -14,7 +14,7 @@
 
 #include "nav2_util/node_utils.hpp"
 
-#include "laser_segmentation/laserSegmentation.hpp"
+#include "laser_segmentation/laser_segmentation.hpp"
 
 laserSegmentation::laserSegmentation(const rclcpp::NodeOptions & options)
 : rclcpp_lifecycle::LifecycleNode("laser_segmentation", "", options), setup_(false)

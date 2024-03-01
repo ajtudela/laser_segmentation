@@ -38,9 +38,9 @@ include_directories(
 )
 
 set(source
-  src/segmentation/segmentationJumpDistance.cpp
-  src/segmentation/segmentationJumpDistanceMerge.cpp
-  src/laserSegmentation.cpp
+  src/segmentation/jump_distance.cpp
+  src/segmentation/jump_distance_merge.cpp
+  src/laser_segmentation.cpp
 )
 
 set(dependencies
@@ -53,22 +53,24 @@ set(dependencies
   slg_msgs
 )
 
+set(library_name ${PROJECT_NAME}_component)
+
 # Add executables
 add_executable(${PROJECT_NAME} src/main.cpp)
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
-target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_component)
+target_link_libraries(${PROJECT_NAME} ${library_name})
 
 # Library node
-add_library(${PROJECT_NAME}_component SHARED ${source})
-ament_target_dependencies(${PROJECT_NAME}_component ${dependencies})
-target_link_libraries(${PROJECT_NAME}_component)
+add_library(${library_name} SHARED ${source})
+ament_target_dependencies(${library_name} ${dependencies})
+target_link_libraries(${library_name})
 
-rclcpp_components_register_nodes(${PROJECT_NAME}_component "composition::LaserSegmentation")
+rclcpp_components_register_nodes(${library_name} "composition::LaserSegmentation")
 
 # ############
 # # Install ##
 # ############
-install(TARGETS ${PROJECT_NAME}_component
+install(TARGETS ${library_name}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -98,8 +100,7 @@ if(BUILD_TESTING)
   # the following line skips the linter which checks for copyrights
   set(ament_cmake_copyright_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
-
-  # add_subdirectory(test)
+  add_subdirectory(test)
 endif()
 
 # ##################################

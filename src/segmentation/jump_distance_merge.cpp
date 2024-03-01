@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include "laser_segmentation/segmentation/segmentationJumpDistanceMerge.hpp"
+#include "laser_segmentation/segmentation/jump_distance_merge.hpp"
 
 void JumpDistanceSegmentationMerge::initialize_segmentation(
   double jump_distance,

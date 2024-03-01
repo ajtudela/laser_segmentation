@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef LASER_SEGMENTATION__LASERSEGMENTATION_HPP_
-#define LASER_SEGMENTATION__LASERSEGMENTATION_HPP_
+#ifndef LASER_SEGMENTATION__LASER_SEGMENTATION_HPP_
+#define LASER_SEGMENTATION__LASER_SEGMENTATION_HPP_
 
 // C++
 #include <memory>
@@ -35,8 +35,8 @@
 // LASER SEGMENTATION
 #include "laser_segmentation/parula.hpp"
 #include "laser_segmentation/segmentation/segmentation.hpp"
-#include "laser_segmentation/segmentation/segmentationJumpDistance.hpp"
-#include "laser_segmentation/segmentation/segmentationJumpDistanceMerge.hpp"
+#include "laser_segmentation/segmentation/jump_distance.hpp"
+#include "laser_segmentation/segmentation/jump_distance_merge.hpp"
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
@@ -151,4 +151,4 @@ private:
   std::shared_ptr<Segmentation> segmentation_;
 };
 
-#endif  // LASER_SEGMENTATION__LASERSEGMENTATION_HPP_
+#endif  // LASER_SEGMENTATION__LASER_SEGMENTATION_HPP_

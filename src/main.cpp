@@ -15,7 +15,7 @@
 /// ROS
 #include "rclcpp/rclcpp.hpp"
 
-#include "laser_segmentation/laserSegmentation.hpp"
+#include "laser_segmentation/laser_segmentation.hpp"
 
 int main(int argc, char ** argv)
 {

@@ -8,6 +8,7 @@ Changelog for package laser_segmentation
 * Improve documentation of source.
 * Converted to Lifecycle node.
 * Converted to component.
+* Rename header and source files.
 
 2.1.2 (23-06-2023)
 ------------------

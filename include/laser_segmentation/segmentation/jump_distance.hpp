@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef LASER_SEGMENTATION__SEGMENTATION__SEGMENTATIONJUMPDISTANCE_HPP_
-#define LASER_SEGMENTATION__SEGMENTATION__SEGMENTATIONJUMPDISTANCE_HPP_
+#ifndef LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_HPP_
+#define LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_HPP_
 
 // C++
 #include <memory>
@@ -138,4 +138,4 @@ protected:
   std::string threshold_method_;
 };
 
-#endif  // LASER_SEGMENTATION__SEGMENTATION__SEGMENTATIONJUMPDISTANCE_HPP_
+#endif  // LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_HPP_

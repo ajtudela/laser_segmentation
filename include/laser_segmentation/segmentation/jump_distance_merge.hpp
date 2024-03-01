@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef LASER_SEGMENTATION__SEGMENTATION__SEGMENTATIONJUMPDISTANCEMERGE_HPP_
-#define LASER_SEGMENTATION__SEGMENTATION__SEGMENTATIONJUMPDISTANCEMERGE_HPP_
+#ifndef LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_MERGE_HPP_
+#define LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_MERGE_HPP_
 
 // C++
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "laser_segmentation/segmentation/segmentationJumpDistance.hpp"
+#include "laser_segmentation/segmentation/jump_distance.hpp"
 
 /**
  * @brief Jump distance segmentation algorithm which merge segments
@@ -69,4 +69,4 @@ public:
   typedef std::shared_ptr<JumpDistanceSegmentationMerge> SharedPtr;
 };
 
-#endif  // LASER_SEGMENTATION__SEGMENTATION__SEGMENTATIONJUMPDISTANCEMERGE_HPP_
+#endif  // LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_MERGE_HPP_
