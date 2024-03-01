@@ -34,6 +34,7 @@
 
 // LASER SEGMENTATION
 #include "laser_segmentation/parula.hpp"
+#include "laser_segmentation/parameter_handler.hpp"
 #include "laser_segmentation/segmentation/segmentation.hpp"
 #include "laser_segmentation/segmentation/jump_distance.hpp"
 #include "laser_segmentation/segmentation/jump_distance_merge.hpp"
@@ -98,13 +99,6 @@ public:
 
 private:
   /**
-   * @brief Callback executed when a parameter change is detected
-   * @param event ParameterEvent message
-   */
-  rcl_interfaces::msg::SetParametersResult parameters_callback(
-    const std::vector<rclcpp::Parameter> & parameters);
-
-  /**
    * @brief Callback executed when a new scan is received
    *
    * @param scan The received scan
@@ -140,14 +134,9 @@ private:
   rclcpp_lifecycle::LifecyclePublisher<visualization_msgs::msg::MarkerArray>::SharedPtr
     segment_viz_points_pub_;
   rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
+  std::unique_ptr<ParameterHandler> param_handler_;
 
-  rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr callback_handle_;
-
-  std::string scan_topic_, seg_topic_, segmentation_type_, method_thres_;
-  int min_points_, max_points_;
-  double min_avg_distance_from_sensor_, max_avg_distance_from_sensor_, min_segment_width_,
-    max_segment_width_, distance_thres_, noise_reduction_;
-  bool setup_, restore_;
+  Parameters * params_;
   std::shared_ptr<Segmentation> segmentation_;
 };
 

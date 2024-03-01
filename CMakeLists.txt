@@ -40,6 +40,7 @@ include_directories(
 set(source
   src/segmentation/jump_distance.cpp
   src/segmentation/jump_distance_merge.cpp
+  src/parameter_handler.cpp
   src/laser_segmentation.cpp
 )
 

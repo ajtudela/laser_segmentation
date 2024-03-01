@@ -9,6 +9,7 @@ Changelog for package laser_segmentation
 * Converted to Lifecycle node.
 * Converted to component.
 * Rename header and source files.
+* Move parameters to new class: parameterHandler.
 
 2.1.2 (23-06-2023)
 ------------------
