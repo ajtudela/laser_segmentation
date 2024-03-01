@@ -16,12 +16,17 @@
 
 #include "laser_segmentation/laserSegmentation.hpp"
 
-/* Initialize the subscribers and publishers */
-laserSegmentation::laserSegmentation()
-: Node("laser_segmentation"), setup_(false)
+laserSegmentation::laserSegmentation(
+  const std::string & node_name,
+  const std::string & ns,
+  const rclcpp::NodeOptions & options)
+: rclcpp_lifecycle::LifecycleNode(node_name, ns, options), setup_(false)
 {
-  // Initialize ROS parameters
+}
 
+CallbackReturn laserSegmentation::on_configure(const rclcpp_lifecycle::State &)
+{
+  RCLCPP_INFO(this->get_logger(), "Configuring the node...");
   // INTEGER PARAMS ..........................................................................
   nav2_util::declare_parameter_if_not_declared(
     this, "min_points_segment", rclcpp::ParameterValue(3),
@@ -196,7 +201,7 @@ laserSegmentation::laserSegmentation()
   } else {
     RCLCPP_FATAL(
       this->get_logger(), "Segmentation algorithm is invalid: %s]", segmentation_type_.c_str());
-    return;
+    return CallbackReturn::FAILURE;
   }
 
   // Publishers
@@ -210,11 +215,52 @@ laserSegmentation::laserSegmentation()
     scan_topic_,
     default_qos,
     std::bind(&laserSegmentation::scan_callback, this, std::placeholders::_1));
+
+  return CallbackReturn::SUCCESS;
 }
 
-laserSegmentation::~laserSegmentation()
+CallbackReturn laserSegmentation::on_activate(const rclcpp_lifecycle::State & state)
 {
+  LifecycleNode::on_activate(state);
+  RCLCPP_INFO(this->get_logger(), "Activating the node...");
+
+  segment_pub_->on_activate();
+  segment_viz_points_pub_->on_activate();
+  return CallbackReturn::SUCCESS;
 }
+
+CallbackReturn laserSegmentation::on_deactivate(const rclcpp_lifecycle::State & state)
+{
+  LifecycleNode::on_deactivate(state);
+  RCLCPP_INFO(this->get_logger(), "Deactivating the node...");
+
+  segment_pub_->on_deactivate();
+  segment_viz_points_pub_->on_deactivate();
+  return CallbackReturn::SUCCESS;
+}
+
+CallbackReturn laserSegmentation::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+{
+  RCLCPP_INFO(this->get_logger(), "Cleaning the node...");
+
+  // Release the shared pointers
+  segment_pub_.reset();
+  segment_viz_points_pub_.reset();
+
+  return CallbackReturn::SUCCESS;
+}
+
+CallbackReturn laserSegmentation::on_shutdown(const rclcpp_lifecycle::State & state)
+{
+  RCLCPP_INFO(this->get_logger(), "Shutdown the node from state %s.", state.label().c_str());
+
+  // Release the shared pointers
+  segment_pub_.reset();
+  segment_viz_points_pub_.reset();
+
+  return CallbackReturn::SUCCESS;
+}
+
 
 rcl_interfaces::msg::SetParametersResult laserSegmentation::parameters_callback(
   const std::vector<rclcpp::Parameter> & parameters)
@@ -510,8 +556,10 @@ std_msgs::msg::ColorRGBA laserSegmentation::get_palette_color(unsigned int index
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  auto node = std::make_shared<laserSegmentation>();
-  rclcpp::spin(node);
+  rclcpp::executors::SingleThreadedExecutor exe;
+  auto node = std::make_shared<laserSegmentation>("laser_segmentation");
+  exe.add_node(node->get_node_base_interface());
+  exe.spin();
   rclcpp::shutdown();
   return 0;
 }

@@ -22,6 +22,8 @@
 
 // ROS
 #include "rclcpp/rclcpp.hpp"
+#include "rclcpp_lifecycle/lifecycle_node.hpp"
+#include "rclcpp_lifecycle/lifecycle_publisher.hpp"
 #include "rcl_interfaces/msg/set_parameters_result.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 #include "visualization_msgs/msg/marker_array.hpp"
@@ -36,20 +38,68 @@
 #include "laser_segmentation/segmentation/segmentationJumpDistance.hpp"
 #include "laser_segmentation/segmentation/segmentationJumpDistanceMerge.hpp"
 
-class laserSegmentation : public rclcpp::Node
+using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
+
+class laserSegmentation : public rclcpp_lifecycle::LifecycleNode
 {
 public:
-/**
- * @brief Construct a new laser Segmentation object
- *
- */
-  laserSegmentation();
+  /**
+   * @brief Construct a new laser Segmentation object
+   *
+   * @param node_name Name for the node
+   * @param namespace Namespace for the node, if any
+   * @param options Node options
+   */
+  laserSegmentation(
+    const std::string & node_name,
+    const std::string & ns = "",
+    const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
 
   /**
    * @brief Destroy the laser Segmentation object
    *
    */
-  ~laserSegmentation();
+  ~laserSegmentation() = default;
+
+  /**
+   * @brief Configure the node
+   *
+   * @param state State of the node
+   * @return CallbackReturn
+   */
+  CallbackReturn on_configure(const rclcpp_lifecycle::State & state) override;
+
+  /**
+   * @brief Activate the node
+   *
+   * @param state State of the node
+   * @return CallbackReturn
+   */
+  CallbackReturn on_activate(const rclcpp_lifecycle::State & state) override;
+
+  /**
+   * @brief Deactivate the node
+   *
+   * @param state State of the node
+   * @return CallbackReturn
+   */
+  CallbackReturn on_deactivate(const rclcpp_lifecycle::State & state) override;
+
+  /**
+   * @brief Cleanup the node
+   *
+   * @param state State of the node
+   * @return CallbackReturn
+   */
+  CallbackReturn on_cleanup(const rclcpp_lifecycle::State & state) override;
+
+  /**
+   * @brief Shutdown the node
+   *
+   * @param state State of the node
+   * @return CallbackReturn
+   */
+  CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
 
 private:
   /**
@@ -91,8 +141,9 @@ private:
    */
   std_msgs::msg::ColorRGBA get_palette_color(unsigned int index);
 
-  rclcpp::Publisher<slg_msgs::msg::SegmentArray>::SharedPtr segment_pub_;
-  rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr segment_viz_points_pub_;
+  rclcpp_lifecycle::LifecyclePublisher<slg_msgs::msg::SegmentArray>::SharedPtr segment_pub_;
+  rclcpp_lifecycle::LifecyclePublisher<visualization_msgs::msg::MarkerArray>::SharedPtr
+    segment_viz_points_pub_;
   rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
 
   rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr callback_handle_;
