@@ -16,6 +16,7 @@
 #define LASER_SEGMENTATION__LASERSEGMENTATION_HPP_
 
 // C++
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -38,15 +39,56 @@
 class laserSegmentation : public rclcpp::Node
 {
 public:
+/**
+ * @brief Construct a new laser Segmentation object
+ *
+ */
   laserSegmentation();
+
+  /**
+   * @brief Destroy the laser Segmentation object
+   *
+   */
   ~laserSegmentation();
 
 private:
+  /**
+   * @brief Callback executed when a parameter change is detected
+   * @param event ParameterEvent message
+   */
   rcl_interfaces::msg::SetParametersResult parameters_callback(
     const std::vector<rclcpp::Parameter> & parameters);
+
+  /**
+   * @brief Callback executed when a new scan is received
+   *
+   * @param scan The received scan
+   */
   void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan);
-  void show_visualization(std_msgs::msg::Header header, std::vector<slg::Segment2D> segmentList);
+
+  /**
+   * @brief Show the visualization of the segments
+   *
+   * @param header Header of the message
+   * @param segment_list List of segments
+   */
+  void show_visualization(std_msgs::msg::Header header, std::vector<slg::Segment2D> segment_list);
+
+  /**
+   * @brief Get the parula color object
+   *
+   * @param index Index of the color
+   * @param max Maximum index
+   * @return std_msgs::msg::ColorRGBA
+   */
   std_msgs::msg::ColorRGBA get_parula_color(unsigned int index, unsigned int max);
+
+  /**
+   * @brief Get the palette color object
+   *
+   * @param index Index of the color
+   * @return std_msgs::msg::ColorRGBA
+   */
   std_msgs::msg::ColorRGBA get_palette_color(unsigned int index);
 
   rclcpp::Publisher<slg_msgs::msg::SegmentArray>::SharedPtr segment_pub_;
@@ -60,7 +102,7 @@ private:
   double min_avg_distance_from_sensor_, max_avg_distance_from_sensor_, min_segment_width_,
     max_segment_width_, distance_thres_, noise_reduction_;
   bool setup_, restore_;
-  Segmentation::SharedPtr segmentation_;
+  std::shared_ptr<Segmentation> segmentation_;
 };
 
 #endif  // LASER_SEGMENTATION__LASERSEGMENTATION_HPP_

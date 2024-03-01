@@ -31,24 +31,43 @@
 class Segmentation
 {
 public:
-  // Destructor.
+  /**
+   * @brief Destroy the Segmentation object
+   *
+   */
   virtual ~Segmentation() {}
 
-  // Initialize segmentation algorithm.
+  /**
+   * @brief Initialize the segmentation algorithm.
+   *
+   * @param distance The maximum distance between two consecutive points
+   * to be considered part of the same segment.
+   * @param angle_resolution The minimum angle between two consecutive points.
+   * @param noise_reduction Parameter for noise reduction (if applicable).
+   * @param method The method to be used for segmentation.
+   */
   virtual void initialize_segmentation(
     double distance, double angle_resolution,
     double noise_reduction, std::string method = "") = 0;
 
-  // Segment the given list of points. Consecutive points are assumed to be adjacent.
+  /**
+   * @brief Perform the segmentation of the given list of points.
+   *
+   * @param points The list of points to be segmented.
+   * @param segments The resulting list of segments.
+   */
   virtual void perform_segmentation(
     const std::vector<slg::Point2D> points,
     std::vector<slg::Segment2D> & segments) = 0;
 
-  // Typedefs for easier readability.
-  typedef std::shared_ptr<Segmentation> SharedPtr;
-
 protected:
-  // Check if the point is valid (i.e. not out-of-range)
+  /**
+   * @brief Check if the point is valid (i.e. not out-of-range)
+   *
+   * @param point The point to be checked.
+   * @return true If the point is valid.
+   * @return false If the point is not valid.
+   */
   inline bool is_valid(const slg::Point2D point)
   {
     return !point.isnan();

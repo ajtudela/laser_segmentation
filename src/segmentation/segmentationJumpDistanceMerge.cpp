@@ -14,7 +14,6 @@
 
 #include "laser_segmentation/segmentation/segmentationJumpDistanceMerge.hpp"
 
-/* Constructor */
 void JumpDistanceSegmentationMerge::initialize_segmentation(
   double jump_distance,
   double angle_resolution,
@@ -27,20 +26,19 @@ void JumpDistanceSegmentationMerge::initialize_segmentation(
   threshold_method_ = method;
 }
 
-/* Segment the list of points into a list of segments using Jump Distance Clustering */
 void JumpDistanceSegmentationMerge::perform_segmentation(
   const std::vector<slg::Point2D> points,
   std::vector<slg::Segment2D> & segments)
 {
   int count = -1;
 
-  /* Create the points and segment */
+  // Create the points and segment
   slg::Point2D prev_point = slg::Point2D::quiet_NaN();
   slg::Point2D current_point = slg::Point2D::quiet_NaN();
   slg::Point2D next_point = slg::Point2D::quiet_NaN();
   slg::Segment2D current_segment;
 
-  /* Iterate over the n points to create the segments */
+  // Iterate over the n points to create the segments
   for (std::vector<slg::Point2D>::size_type p = 0; p < points.size(); p++) {
     // Create current point
     current_point = points[p];
@@ -93,10 +91,10 @@ void JumpDistanceSegmentationMerge::perform_segmentation(
     prev_point = current_point;
   }
 
-  /* Add the last segment to the list */
+  // Add the last segment to the list
   segments.push_back(current_segment);
 
-  /* Check if last and first segments belongs to the same segment */
+  // Check if last and first segments belongs to the same segment
   slg::Segment2D first_segment = segments.front();
   slg::Segment2D last_segment = segments.back();
   // Check if the point belong to the same segment or we have to discard it.

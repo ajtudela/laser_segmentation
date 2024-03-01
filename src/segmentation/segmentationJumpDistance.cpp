@@ -14,7 +14,6 @@
 
 #include "laser_segmentation/segmentation/segmentationJumpDistance.hpp"
 
-/* Constructor */
 void JumpDistanceSegmentation::initialize_segmentation(
   double jump_distance,
   double angle_resolution,
@@ -26,20 +25,19 @@ void JumpDistanceSegmentation::initialize_segmentation(
   threshold_method_ = method;
 }
 
-/* Segment the list of points into a list of segments using Jump Distance Clustering */
 void JumpDistanceSegmentation::perform_segmentation(
   const std::vector<slg::Point2D> points,
   std::vector<slg::Segment2D> & segments)
 {
   int count = -1;
 
-  /* Create the points and segment */
+  // Create the points and segment
   slg::Point2D prev_point = slg::Point2D::quiet_NaN();
   slg::Point2D current_point = slg::Point2D::quiet_NaN();
   slg::Point2D next_point = slg::Point2D::quiet_NaN();
   slg::Segment2D current_segment;
 
-  /* Iterate over the n points to create the segments */
+  // Iterate over the n points to create the segments
   for (std::vector<slg::Point2D>::size_type p = 0; p < points.size(); p++) {
     // Create current point
     current_point = points[p];
@@ -66,10 +64,10 @@ void JumpDistanceSegmentation::perform_segmentation(
     prev_point = current_point;
   }
 
-  /* Add the last segment to the list */
+  // Add the last segment to the list
   segments.push_back(current_segment);
 
-  /* Check if last and first segments belongs to the same segment */
+  // Check if last and first segments belongs to the same segment
   slg::Segment2D first_segment = segments.front();
   slg::Segment2D last_segment = segments.back();
   // Check if the point belong to the same segment or we have to discard it.
@@ -88,7 +86,6 @@ void JumpDistanceSegmentation::perform_segmentation(
   }
 }
 
-/* Checks if two adjacent points are close to each other. */
 bool JumpDistanceSegmentation::is_jump_between(const slg::Point2D point1, const slg::Point2D point2)
 {
   // Check if one or both points are NaN
@@ -110,7 +107,6 @@ bool JumpDistanceSegmentation::is_jump_between(const slg::Point2D point1, const 
   return distance > new_jump_distance;
 }
 
-/* Checks if two adjacent segments are close to each other. The order is important. */
 bool JumpDistanceSegmentation::is_jump_between(
   const slg::Segment2D segment1,
   const slg::Segment2D segment2)
@@ -118,7 +114,6 @@ bool JumpDistanceSegmentation::is_jump_between(
   return is_jump_between(segment1.last_point(), segment2.first_point());
 }
 
-/* Calculate jump distance using Lee method (Lee, 2001). */
 double JumpDistanceSegmentation::calculate_lee_threshold(
   const slg::Point2D point1,
   const slg::Point2D point2)
@@ -126,7 +121,6 @@ double JumpDistanceSegmentation::calculate_lee_threshold(
   return fabs((point1.length() - point2.length()) / (point1.length() + point2.length()));
 }
 
-/* Calculate threshold condition using Dietmayer method (Dietmayer, et al., 2001). */
 double JumpDistanceSegmentation::calculate_diet_threshold(
   const slg::Point2D point1,
   const slg::Point2D point2)
@@ -138,7 +132,6 @@ double JumpDistanceSegmentation::calculate_diet_threshold(
   return c0 + c1 * minRange;
 }
 
-/* Calculate threshold condition using Santos method (Santos, et al., 2003). */
 double JumpDistanceSegmentation::calculate_santos_threshold(
   const slg::Point2D point1,
   const slg::Point2D point2)

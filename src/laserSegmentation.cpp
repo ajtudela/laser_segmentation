@@ -307,7 +307,6 @@ rcl_interfaces::msg::SetParametersResult laserSegmentation::parameters_callback(
   return result;
 }
 
-/* Callback function */
 void laserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan_msg)
 {
   // Note: Only perform laserscan segmentation if there's any subscriber
@@ -380,7 +379,6 @@ void laserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
   show_visualization(scan_msg->header, segment_filtered_list);
 }
 
-/* Show the segments in rviz */
 void laserSegmentation::show_visualization(
   std_msgs::msg::Header header,
   std::vector<slg::Segment2D> segment_list)
@@ -443,7 +441,7 @@ void laserSegmentation::show_visualization(
   // Push the deletion marker
   viz_array.markers.push_back(deletion_marker);
 
-  /* Show the segments and the id */
+  // Show the segments and the id
   for (std::vector<slg::Segment2D>::size_type i = 0; i < segment_list.size(); i++) {
     slg::Segment2D current_segment = segment_list[i];
     viz_point.id = i;
@@ -480,7 +478,6 @@ void laserSegmentation::show_visualization(
   segment_viz_points_pub_->publish(viz_array);
 }
 
-/* Get Parula color of the class */
 std_msgs::msg::ColorRGBA laserSegmentation::get_parula_color(unsigned int index, unsigned int max)
 {
   std_msgs::msg::ColorRGBA color;
@@ -492,7 +489,6 @@ std_msgs::msg::ColorRGBA laserSegmentation::get_parula_color(unsigned int index,
   return color;
 }
 
-/* Get palette color of the class */
 std_msgs::msg::ColorRGBA laserSegmentation::get_palette_color(unsigned int index)
 {
   std_msgs::msg::ColorRGBA color;

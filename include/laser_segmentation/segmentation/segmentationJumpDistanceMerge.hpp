@@ -30,12 +30,41 @@
 class JumpDistanceSegmentationMerge : public JumpDistanceSegmentation
 {
 public:
-  virtual void initialize_segmentation(
+  /**
+   * @brief Construct a new Jump Distance Segmentation Merge object
+   *
+   */
+  JumpDistanceSegmentationMerge() = default;
+
+  /**
+   * @brief Destroy the Jump Distance Segmentation Merge object
+   *
+   */
+  ~JumpDistanceSegmentationMerge() override = default;
+
+  /**
+   * @brief Initialize the segmentation algorithm.
+   *
+   * @param distance The maximum distance between two consecutive points
+   * to be considered part of the same segment.
+   * @param angle_resolution The minimum angle between two consecutive points.
+   * @param noise_reduction Parameter for noise reduction (if applicable).
+   * @param method The method to be used for segmentation.
+   */
+  void initialize_segmentation(
     double distance, double angle_resolution,
-    double noise_reduction, std::string method = "");
-  virtual void perform_segmentation(
+    double noise_reduction, std::string method = "") override;
+
+  /**
+   * @brief Perform the segmentation of the given list of points
+   * into a list of segments using Jump Distance Clustering.
+   *
+   * @param points The list of points to be segmented.
+   * @param segments The resulting list of segments.
+   */
+  void perform_segmentation(
     const std::vector<slg::Point2D> points,
-    std::vector<slg::Segment2D> & segments);
+    std::vector<slg::Segment2D> & segments) override;
 
   typedef std::shared_ptr<JumpDistanceSegmentationMerge> SharedPtr;
 };
