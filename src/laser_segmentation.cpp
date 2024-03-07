@@ -179,31 +179,32 @@ void laserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
   }
   segment_pub_->publish(segment_array_msg);
 
-  // Shows the segments
-  show_visualization(scan_msg->header, segment_filtered_list);
+  // Publish visualization markers
+  segment_viz_points_pub_->publish(
+    create_segment_viz_points(scan_msg->header, segment_filtered_list));
 }
 
-void laserSegmentation::show_visualization(
+visualization_msgs::msg::MarkerArray laserSegmentation::create_segment_viz_points(
   std_msgs::msg::Header header,
   std::vector<slg::Segment2D> segment_list)
 {
-  // Note: Only perform visualization if there's any subscriber
-  if (segment_viz_points_pub_->get_subscription_count() == 0) {
-    return;
-  }
-
   // Create the visualization message
   visualization_msgs::msg::MarkerArray viz_array;
 
+  // Create a deletion marker to clear the previous points
+  visualization_msgs::msg::Marker deletion_marker;
+  deletion_marker.header = header;
+  deletion_marker.action = visualization_msgs::msg::Marker::DELETEALL;
+  viz_array.markers.push_back(deletion_marker);
+
   // Create a marker point
-  visualization_msgs::msg::Marker viz_point;
-  viz_point.header = header;
-  viz_point.lifetime = rclcpp::Duration(0, 10);
-  viz_point.ns = "segments";
-  viz_point.type = visualization_msgs::msg::Marker::POINTS;
-  viz_point.action = visualization_msgs::msg::Marker::ADD;
-  viz_point.scale.x = 0.02;
-  viz_point.scale.y = 0.02;
+  visualization_msgs::msg::Marker viz_points;
+  viz_points.header = header;
+  viz_points.lifetime = rclcpp::Duration(0, 10);
+  viz_points.ns = "segments";
+  viz_points.type = visualization_msgs::msg::Marker::POINTS;
+  viz_points.action = visualization_msgs::msg::Marker::ADD;
+  viz_points.scale.x = viz_points.scale.y = 0.02;
 
   // Create a marker centroid
   visualization_msgs::msg::Marker viz_centroids;
@@ -212,13 +213,7 @@ void laserSegmentation::show_visualization(
   viz_centroids.ns = "centroids";
   viz_centroids.type = visualization_msgs::msg::Marker::CUBE;
   viz_centroids.action = visualization_msgs::msg::Marker::ADD;
-  viz_centroids.scale.x = 0.05;
-  viz_centroids.scale.y = 0.05;
-  viz_centroids.scale.z = 0.05;
-  viz_centroids.pose.orientation.x = 0.0;
-  viz_centroids.pose.orientation.y = 0.0;
-  viz_centroids.pose.orientation.z = 0.0;
-  viz_centroids.pose.orientation.w = 1.0;
+  viz_centroids.scale.x = viz_centroids.scale.y = viz_centroids.scale.z = 0.05;
 
   // Create a marker id text
   visualization_msgs::msg::Marker viz_text;
@@ -227,38 +222,26 @@ void laserSegmentation::show_visualization(
   viz_text.ns = "id";
   viz_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
   viz_text.action = visualization_msgs::msg::Marker::ADD;
-  viz_text.pose.orientation.x = 0.0;
-  viz_text.pose.orientation.y = 0.0;
-  viz_text.pose.orientation.z = 0.0;
-  viz_text.pose.orientation.w = 1.0;
   viz_text.scale.z = 0.25;
   viz_text.color.r = 1.0;
   viz_text.color.g = 1.0;
   viz_text.color.b = 1.0;
   viz_text.color.a = 1.0;
 
-  // Create a deletion marker
-  visualization_msgs::msg::Marker deletion_marker;
-  deletion_marker.header = header;
-  deletion_marker.action = visualization_msgs::msg::Marker::DELETEALL;
-
-  // Push the deletion marker
-  viz_array.markers.push_back(deletion_marker);
-
   // Show the segments and the id
   for (std::vector<slg::Segment2D>::size_type i = 0; i < segment_list.size(); i++) {
-    slg::Segment2D current_segment = segment_list[i];
-    viz_point.id = i;
+    viz_points.id = i;
     viz_text.id = i;
     viz_centroids.id = i;
 
     // Change the color of the segment
-    viz_point.color = get_palette_color(i);
+    viz_points.color = get_palette_color(i);
     viz_centroids.color = get_palette_color(i);
 
     // Iterate over the points of the segment
-    for (slg::Point2D point : current_segment.get_points()) {
-      viz_point.points.push_back(point);
+    slg::Segment2D current_segment = segment_list[i];
+    for (const auto & point : current_segment.get_points()) {
+      viz_points.points.push_back(point);
     }
 
     // Get position of the text
@@ -271,15 +254,15 @@ void laserSegmentation::show_visualization(
     viz_centroids.pose.position.z = 0.0;
 
     // Push to arrays
-    viz_array.markers.push_back(viz_point);
+    viz_array.markers.push_back(viz_points);
     viz_array.markers.push_back(viz_centroids);
     viz_array.markers.push_back(viz_text);
 
     // Clear markers
-    viz_point.points.clear();
+    viz_points.points.clear();
   }
-  // Publish visualization
-  segment_viz_points_pub_->publish(viz_array);
+
+  return viz_array;
 }
 
 std_msgs::msg::ColorRGBA laserSegmentation::get_parula_color(unsigned int index, unsigned int max)

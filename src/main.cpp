@@ -12,18 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// ROS
-#include "rclcpp/rclcpp.hpp"
+#include <memory>
 
+#include "rclcpp/rclcpp.hpp"
 #include "laser_segmentation/laser_segmentation.hpp"
 
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
-  rclcpp::executors::SingleThreadedExecutor exe;
   auto node = std::make_shared<laserSegmentation>();
-  exe.add_node(node->get_node_base_interface());
-  exe.spin();
+  rclcpp::spin(node->get_node_base_interface());
   rclcpp::shutdown();
   return 0;
 }

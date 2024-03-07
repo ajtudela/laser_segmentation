@@ -41,9 +41,12 @@ void JumpDistanceSegmentation::perform_segmentation(
   for (std::vector<slg::Point2D>::size_type p = 0; p < points.size(); p++) {
     // Create current point
     current_point = points[p];
-    // Check if point is valid
-    if (!is_valid(current_point)) {continue;}
-    // Create the next point. First, we check if it's the last loop
+    // Skip invalid points
+    if (!is_valid(current_point)) {
+      continue;
+    }
+    // Create the next point.
+    // First, we check if it's the last loop
     if (p != points.size() - 1) {
       next_point = points[p + 1];
     } else {
@@ -56,7 +59,9 @@ void JumpDistanceSegmentation::perform_segmentation(
       current_segment.set_next_segment(next_point);
     } else {
       // Add the actual segment to the list
-      if (!current_segment.empty()) {segments.push_back(current_segment);}
+      if (!current_segment.empty()) {
+        segments.push_back(current_segment);
+      }
       // And create a new segment
       current_segment = slg::Segment2D(++count, prev_point, current_point, next_point);
     }
@@ -89,7 +94,9 @@ void JumpDistanceSegmentation::perform_segmentation(
 bool JumpDistanceSegmentation::is_jump_between(const slg::Point2D point1, const slg::Point2D point2)
 {
   // Check if one or both points are NaN
-  if (point1.isnan() || point2.isnan()) {return true;}
+  if (point1.isnan() || point2.isnan()) {
+    return true;
+  }
   // Calculate the distance between the two points
   double distance = (point2 - point1).length();
   // Select the method to calculate a dynamic jump distance threshold

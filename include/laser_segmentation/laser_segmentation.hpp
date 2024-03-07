@@ -97,7 +97,7 @@ public:
    */
   CallbackReturn on_shutdown(const rclcpp_lifecycle::State & state) override;
 
-private:
+protected:
   /**
    * @brief Callback executed when a new scan is received
    *
@@ -106,19 +106,22 @@ private:
   void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan);
 
   /**
-   * @brief Show the visualization of the segments
+   * @brief Create the segment array message
    *
    * @param header Header of the message
    * @param segment_list List of segments
+   * @return slg_msgs::msg::SegmentArray The segment array message
    */
-  void show_visualization(std_msgs::msg::Header header, std::vector<slg::Segment2D> segment_list);
+  visualization_msgs::msg::MarkerArray create_segment_viz_points(
+    std_msgs::msg::Header header,
+    std::vector<slg::Segment2D> segment_list);
 
   /**
    * @brief Get the parula color object
    *
    * @param index Index of the color
    * @param max Maximum index
-   * @return std_msgs::msg::ColorRGBA
+   * @return std_msgs::msg::ColorRGBA The color
    */
   std_msgs::msg::ColorRGBA get_parula_color(unsigned int index, unsigned int max);
 
@@ -126,7 +129,7 @@ private:
    * @brief Get the palette color object
    *
    * @param index Index of the color
-   * @return std_msgs::msg::ColorRGBA
+   * @return std_msgs::msg::ColorRGBA The color
    */
   std_msgs::msg::ColorRGBA get_palette_color(unsigned int index);
 

@@ -42,9 +42,12 @@ void JumpDistanceSegmentationMerge::perform_segmentation(
   for (std::vector<slg::Point2D>::size_type p = 0; p < points.size(); p++) {
     // Create current point
     current_point = points[p];
-    // Check if point is valid
-    if (!is_valid(current_point)) {continue;}
-    // Create the next point. First, we check if it's the last loop
+    // Skip invalid points
+    if (!is_valid(current_point)) {
+      continue;
+    }
+    // Create the next point.
+    // First, we check if it's the last loop
     if (p != points.size() - 1) {
       next_point = points[p + 1];
     } else {
@@ -57,7 +60,9 @@ void JumpDistanceSegmentationMerge::perform_segmentation(
       current_segment.set_next_segment(next_point);
     } else {
       // Add the actual segment to the list
-      if (!current_segment.empty()) {segments.push_back(current_segment);}
+      if (!current_segment.empty()) {
+        segments.push_back(current_segment);
+      }
       // And create a new segment
       current_segment = slg::Segment2D(++count, prev_point, current_point, next_point);
       // Check predecessors segments
