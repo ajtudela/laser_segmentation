@@ -11,6 +11,7 @@ Changelog for package laser_segmentation
 * Rename header and source files.
 * Move parameters to new class: parameterHandler.
 * Rename show_visualization to create_segment_viz_points.
+* Fix jump distance merge.
 
 2.1.2 (23-06-2023)
 ------------------

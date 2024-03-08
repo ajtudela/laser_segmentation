@@ -66,19 +66,7 @@ void JumpDistanceSegmentationMerge::perform_segmentation(
       // And create a new segment
       current_segment = slg::Segment2D(++count, prev_point, current_point, next_point);
       // Check predecessors segments
-      if (segments.size() > 1) {
-        // First-order comparison:
-        // Check pre-predecessor segment to see if it is close to the current point
-        slg::Segment2D prev_segment = segments[segments.size() - 2];
-        if (!is_jump_between(prev_segment, current_segment)) {
-          // Merge both segments
-          prev_segment.merge(current_segment);
-          // Push back to the list
-          segments[segments.size() - 2] = prev_segment;
-          // Set the current segment as the prior
-          current_segment = prev_segment;
-        }
-      } else if (segments.size() > 2) {
+      if (segments.size() > 2) {
         // Second-order comparison:
         // Check pre-pre-predecessor segment if it is close to the current point
         slg::Segment2D prev_segment = segments[segments.size() - 3];
@@ -87,8 +75,20 @@ void JumpDistanceSegmentationMerge::perform_segmentation(
           prev_segment.merge(current_segment);
           // Push back to the list
           segments[segments.size() - 3] = prev_segment;
-          // Set the current segment as the prior
-          current_segment = prev_segment;
+          // Empty the current segment
+          current_segment = slg::Segment2D();
+        }
+      } else if (segments.size() > 1) {
+        // First-order comparison:
+        // Check pre-predecessor segment to see if it is close to the current point
+        slg::Segment2D prev_segment = segments[segments.size() - 2];
+        if (!is_jump_between(prev_segment, current_segment)) {
+          // Merge both segments
+          prev_segment.merge(current_segment);
+          // Push back to the list
+          segments[segments.size() - 2] = prev_segment;
+          // Empty the current segment
+          current_segment = slg::Segment2D();
         }
       }
     }
@@ -97,7 +97,9 @@ void JumpDistanceSegmentationMerge::perform_segmentation(
   }
 
   // Add the last segment to the list
-  segments.push_back(current_segment);
+  if (!current_segment.empty()) {
+    segments.push_back(current_segment);
+  }
 
   // Check if last and first segments belongs to the same segment
   slg::Segment2D first_segment = segments.front();
