@@ -42,3 +42,4 @@ jobs:
           files: ros_ws/lcov/total_coverage.info,ros_ws/coveragepy/.coverage
           flags: unittests
           name: codecov-umbrella
+          slug: ajtudela/laser_segmentation
