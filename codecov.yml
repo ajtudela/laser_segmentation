@@ -1,0 +1,14 @@
+fixes:
+  - "src/laser_segmentation/::"
+  - "install/::"
+
+ignore:
+  - "*/**/test/*"  # ignore package test directories
+  - "*/test/**/*" # ignore package  test directories
+  - "**/test_*.*" # ignore files starting with test_
+  - "**/main*.*" # ignore files starting with main
+  - "**/*_tests.*" # ignore files ending with _tests
+  - "*/**/benchmark/*"  # ignore package test directories
+  - "*/benchmark/**/*" # ignore package  test directories
+  - "**/benchmark_*.*" # ignore files starting with test_
+  - "**/*_benchmark.*" # ignore files ending with _tests
