@@ -19,10 +19,6 @@ jobs:
         uses: ros-tooling/setup-ros@v0.7
         with:
           required-ros-distributions: humble
-      - name: Install slg_msgs dependencies
-        run: |
-          cd ${{steps.action_ros_ci_step.outputs.ros-workspace-directory-name}}
-          git clone https://github.com/ajtudela/slg_msgs.git
       - name: Install dependencies
         uses: ros-tooling/action-ros-ci@v0.3
         with:
