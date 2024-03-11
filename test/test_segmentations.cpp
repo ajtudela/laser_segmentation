@@ -219,7 +219,7 @@ TEST(JumpDistanceTest, performSegmentation) {
   // Check the number of points in the segment
   // Should be 5 points in the segment
   // as the last point is a NaN point
-  EXPECT_EQ(segments[0].size(), points.size()-1);
+  EXPECT_EQ(segments[0].size(), points.size() - 1);
 
   // Now we set the points with a distance of 1.0
   points = create_points(5, 1.0);
