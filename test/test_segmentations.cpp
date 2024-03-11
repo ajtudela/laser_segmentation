@@ -149,9 +149,17 @@ TEST(JumpDistanceTest, isJumpBetween) {
   slg::Point2D point1(0.0, 0.0);
   slg::Point2D point2(0.5, 0.35);
 
+  // Calculate the jump distance when one of the points is NaN
+  bool is_jump = segmentation.is_jump_between(point1, slg::Point2D::quiet_NaN());
+  EXPECT_TRUE(is_jump);
+  is_jump = segmentation.is_jump_between(slg::Point2D::quiet_NaN(), point2);
+  EXPECT_TRUE(is_jump);
+  is_jump = segmentation.is_jump_between(slg::Point2D::quiet_NaN(), slg::Point2D::quiet_NaN());
+  EXPECT_TRUE(is_jump);
+
   // Calculate the jump distance using Lee method
   segmentation.initialize_segmentation(0.1, 0.2, 0.3, "lee");
-  bool is_jump = segmentation.is_jump_between(point1, point2);
+  is_jump = segmentation.is_jump_between(point1, point2);
   // Check the result: 0.61 > 1.0 is false
   EXPECT_FALSE(is_jump);
 
@@ -199,7 +207,7 @@ TEST(JumpDistanceTest, performSegmentation) {
   segmentation.initialize_segmentation(0.1, 0.2, 0.3, "test");
 
   // Set points with a distance of 0.05
-  std::vector<slg::Point2D> points = create_points(3, 0.05);
+  std::vector<slg::Point2D> points = create_points(5, 0.05);
   points.push_back(slg::Point2D::quiet_NaN());
   // Perform the segmentation
   std::vector<slg::Segment2D> segments;
@@ -209,12 +217,12 @@ TEST(JumpDistanceTest, performSegmentation) {
   // and the distance between points is 0.05
   EXPECT_EQ(segments.size(), 1);
   // Check the number of points in the segment
-  // Should be 3 points in the segment
+  // Should be 5 points in the segment
   // as the last point is a NaN point
-  EXPECT_EQ(segments[0].size(), 3);
+  EXPECT_EQ(segments[0].size(), points.size()-1);
 
   // Now we set the points with a distance of 1.0
-  points = create_points(3, 1.0);
+  points = create_points(5, 1.0);
   // Perform the segmentation
   segments.clear();
   segmentation.perform_segmentation(points, segments);
