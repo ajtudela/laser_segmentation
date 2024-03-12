@@ -22,6 +22,11 @@ public:
   laserSegmentationFixture()
   : laserSegmentation() {}
 
+  void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
+  {
+    laserSegmentation::scan_callback(msg);
+  }
+
   std::vector<slg::Segment2D> filter_segments(const std::vector<slg::Segment2D> & segments)
   {
     return laserSegmentation::filter_segments(segments);
@@ -52,6 +57,9 @@ TEST(LaserSegmentationTest, configure) {
     node, "segmentation_type", rclcpp::ParameterValue("jump_distance"));
   node->configure();
   node->activate();
+  // Call an empty callback
+  auto msg = std::make_shared<sensor_msgs::msg::LaserScan>();
+  node->scan_callback(msg);
   node->deactivate();
   node->cleanup();
 
@@ -203,9 +211,9 @@ TEST(LaserSegmentationTest, filterSegments) {
 
   // Set the parameters
   nav2_util::declare_parameter_if_not_declared(
-    node, "min_points_segment", rclcpp::ParameterValue(1));
+    node, "min_points_segment", rclcpp::ParameterValue(2));
   nav2_util::declare_parameter_if_not_declared(
-    node, "max_points_segment", rclcpp::ParameterValue(2));
+    node, "max_points_segment", rclcpp::ParameterValue(4));
   nav2_util::declare_parameter_if_not_declared(
     node, "min_avg_distance_from_sensor", rclcpp::ParameterValue(0.1));
   nav2_util::declare_parameter_if_not_declared(
@@ -220,16 +228,21 @@ TEST(LaserSegmentationTest, filterSegments) {
     node, "noise_reduction", rclcpp::ParameterValue(0.1));
   node->configure();
 
-  // Set a segment list with 0 segments
+  // Set a segment list with 1 segments
   std::vector<slg::Segment2D> segment_list;
+  slg::Segment2D segment;
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  // Filter the segments
   auto filtered_segments = node->filter_segments(segment_list);
   // Check the filtered segments
   EXPECT_EQ(filtered_segments.size(), 0);
 
-  // Set a segment list with 3 segments of 1 point
+  // Set a segment list with 4 segments of 1 point
   segment_list.clear();
-  slg::Segment2D segment;
+  segment.clear();
   segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
   segment_list.push_back(segment);
   segment_list.push_back(segment);
   segment_list.push_back(segment);
