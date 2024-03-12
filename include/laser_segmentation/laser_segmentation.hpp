@@ -106,6 +106,14 @@ protected:
   void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan);
 
   /**
+   * @brief Filter the segments using the parameters
+   *
+   * @param segments List of segments
+   * @return std::vector<slg::Segment2D> Filtered segments
+   */
+  std::vector<slg::Segment2D> filter_segments(const std::vector<slg::Segment2D> & segments);
+
+  /**
    * @brief Create the segment array message
    *
    * @param header Header of the message

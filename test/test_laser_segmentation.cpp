@@ -22,6 +22,11 @@ public:
   laserSegmentationFixture()
   : laserSegmentation() {}
 
+  std::vector<slg::Segment2D> filter_segments(const std::vector<slg::Segment2D> & segments)
+  {
+    return laserSegmentation::filter_segments(segments);
+  }
+
   visualization_msgs::msg::MarkerArray create_segment_viz_points(
     std_msgs::msg::Header header, std::vector<slg::Segment2D> segment_list)
   {
@@ -190,6 +195,103 @@ TEST(LaserSegmentationTest, createVizPoints) {
   EXPECT_EQ(marker_array.markers[3].type, visualization_msgs::msg::Marker::TEXT_VIEW_FACING);
   EXPECT_EQ(marker_array.markers[3].action, visualization_msgs::msg::Marker::ADD);
   EXPECT_EQ(marker_array.markers[3].text, "0");
+}
+
+TEST(LaserSegmentationTest, filterSegments) {
+  // Create the node
+  auto node = std::make_shared<laserSegmentationFixture>();
+
+  // Set the parameters
+  nav2_util::declare_parameter_if_not_declared(
+    node, "min_points_segment", rclcpp::ParameterValue(1));
+  nav2_util::declare_parameter_if_not_declared(
+    node, "max_points_segment", rclcpp::ParameterValue(2));
+  nav2_util::declare_parameter_if_not_declared(
+    node, "min_avg_distance_from_sensor", rclcpp::ParameterValue(0.1));
+  nav2_util::declare_parameter_if_not_declared(
+    node, "max_avg_distance_from_sensor", rclcpp::ParameterValue(10.0));
+  nav2_util::declare_parameter_if_not_declared(
+    node, "min_segment_width", rclcpp::ParameterValue(0.1));
+  nav2_util::declare_parameter_if_not_declared(
+    node, "max_segment_width", rclcpp::ParameterValue(10.0));
+  nav2_util::declare_parameter_if_not_declared(
+    node, "distance_threshold", rclcpp::ParameterValue(0.1));
+  nav2_util::declare_parameter_if_not_declared(
+    node, "noise_reduction", rclcpp::ParameterValue(0.1));
+  node->configure();
+
+  // Set a segment list with 0 segments
+  std::vector<slg::Segment2D> segment_list;
+  auto filtered_segments = node->filter_segments(segment_list);
+  // Check the filtered segments
+  EXPECT_EQ(filtered_segments.size(), 0);
+
+  // Set a segment list with 3 segments of 1 point
+  segment_list.clear();
+  slg::Segment2D segment;
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  segment_list.push_back(segment);
+  segment_list.push_back(segment);
+  // Filter the segments
+  filtered_segments = node->filter_segments(segment_list);
+  // Check the filtered segments
+  EXPECT_EQ(filtered_segments.size(), 0);
+
+  // Set a segment list with 1 segment with centroid below the minimum distance
+  segment_list.clear();
+  segment.clear();
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  // Filter the segments
+  filtered_segments = node->filter_segments(segment_list);
+  // Check the filtered segments
+  EXPECT_EQ(filtered_segments.size(), 0);
+
+  // Set a segment list with 1 segment with centroid above the maximum distance
+  segment_list.clear();
+  segment.clear();
+  segment.add_point(slg::Point2D(11.0, 11.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  // Filter the segments
+  filtered_segments = node->filter_segments(segment_list);
+  // Check the filtered segments
+  EXPECT_EQ(filtered_segments.size(), 0);
+
+  // Set a segment list with 1 segment with width below the minimum width
+  segment_list.clear();
+  segment.clear();
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  // Filter the segments
+  filtered_segments = node->filter_segments(segment_list);
+  // Check the filtered segments
+  EXPECT_EQ(filtered_segments.size(), 0);
+
+  // Set a segment list with 1 segment with width above the maximum width
+  segment_list.clear();
+  segment.clear();
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(10.0, 10.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  // Filter the segments
+  filtered_segments = node->filter_segments(segment_list);
+  // Check the filtered segments
+  EXPECT_EQ(filtered_segments.size(), 0);
+
+  // Set a segment list with 1 segment with 2 points
+  segment_list.clear();
+  segment.clear();
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(1.0, 1.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  // Filter the segments
+  filtered_segments = node->filter_segments(segment_list);
+  // Check the filtered segments
+  EXPECT_EQ(filtered_segments.size(), 1);
+  EXPECT_EQ(filtered_segments[0].centroid().x, 0.5);
+  EXPECT_EQ(filtered_segments[0].centroid().y, 0.5);
 }
 
 int main(int argc, char ** argv)

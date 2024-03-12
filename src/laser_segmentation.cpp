@@ -132,35 +132,7 @@ void laserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
   segmentation_->perform_segmentation(point_list, segment_list);
 
   // Filter segments
-  double squared_min_segment_width = params_->min_segment_width * params_->min_segment_width;
-  double squared_max_segment_width = params_->max_segment_width * params_->max_segment_width;
-  std::vector<slg::Segment2D> segment_filtered_list;
-  segment_filtered_list.reserve(segment_list.size());
-
-  for (const auto & segment : segment_list) {
-    // By number of points
-    if (segment.size() < params_->min_points_segment ||
-      segment.size() > params_->max_points_segment)
-    {
-      continue;
-    }
-
-    // By distance to sensor
-    if (segment.centroid().length() < params_->min_avg_distance_from_sensor ||
-      segment.centroid().length() > params_->max_avg_distance_from_sensor)
-    {
-      continue;
-    }
-
-    // By width
-    if (segment.width_squared() < squared_min_segment_width ||
-      segment.width_squared() > squared_max_segment_width)
-    {
-      continue;
-    }
-
-    segment_filtered_list.push_back(segment);
-  }
+  auto segment_filtered_list = filter_segments(segment_list);
 
   // Identification of segments and set angular distance
   for (std::vector<slg::Segment2D>::size_type s = 0; s < segment_filtered_list.size(); s++) {
@@ -182,6 +154,42 @@ void laserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
   // Publish visualization markers
   segment_viz_points_pub_->publish(
     create_segment_viz_points(scan_msg->header, segment_filtered_list));
+}
+
+std::vector<slg::Segment2D> laserSegmentation::filter_segments(
+  const std::vector<slg::Segment2D> & segments)
+{
+  std::vector<slg::Segment2D> filtered_segments;
+  filtered_segments.reserve(segments.size());
+
+  double squared_min_segment_width = params_->min_segment_width * params_->min_segment_width;
+  double squared_max_segment_width = params_->max_segment_width * params_->max_segment_width;
+
+  for (const auto & segment : segments) {
+    // By number of points
+    if (segment.size() < params_->min_points_segment ||
+      segment.size() > params_->max_points_segment)
+    {
+      continue;
+    }
+
+    // By distance to sensor
+    if (segment.centroid().length() < params_->min_avg_distance_from_sensor ||
+      segment.centroid().length() > params_->max_avg_distance_from_sensor)
+    {
+      continue;
+    }
+
+    // By width
+    if (segment.width_squared() < squared_min_segment_width ||
+      segment.width_squared() > squared_max_segment_width)
+    {
+      continue;
+    }
+
+    filtered_segments.push_back(segment);
+  }
+  return filtered_segments;
 }
 
 visualization_msgs::msg::MarkerArray laserSegmentation::create_segment_viz_points(

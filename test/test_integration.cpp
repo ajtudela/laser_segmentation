@@ -33,33 +33,18 @@ TEST(LaserSegmentationTest, integration) {
 
   // Create and configure the laser_segmentation node
   auto seg_node = std::make_shared<laserSegmentation>();
-  // Set some parameters
-  nav2_util::declare_parameter_if_not_declared(
-    seg_node, "min_points_segment", rclcpp::ParameterValue(1));
-  nav2_util::declare_parameter_if_not_declared(
-    seg_node, "max_points_segment", rclcpp::ParameterValue(3));
   seg_node->configure();
   seg_node->activate();
 
   // Create a scan message with three points
   sensor_msgs::msg::LaserScan scan;
   scan.header.frame_id = "laser_frame";
-  scan.angle_min = -M_PI / 2;
-  scan.angle_max = M_PI / 2;
-  scan.angle_increment = M_PI / 180;
-  scan.time_increment = 0.1;
-  scan.scan_time = 0.1;
-  scan.range_min = 0.0;
-  scan.range_max = 10.0;
-  scan.ranges.push_back(1.0);
-  scan.ranges.push_back(1.1);
-  scan.ranges.push_back(2.0);
-  scan.ranges.push_back(2.1);
-  scan.ranges.push_back(3.0);
-  scan.ranges.push_back(3.2);
-  scan.ranges.push_back(12.0);
   // Publish the message
   scan_pub->publish(scan);
+
+  // Spin the laser_segmentation node
+  // Shouldn get any susbcriptions count
+  rclcpp::spin_some(seg_node->get_node_base_interface());
 
   // Create the segments subscriber node
   auto sub_node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("segment_subscriber");
