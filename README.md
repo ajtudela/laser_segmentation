@@ -128,14 +128,6 @@ Segmentation of the laserscans.
 
 	Parameter for noise reduction in "Santos" and "Dietmayer" algorithms.
 
-## Future work
-- [ ] Add Delaunay triangulation method based on "Human Detection using Multimodal and Multidimensional Features" (Spinello).
-- [ ] Add Agglomerative Hierarchical Clustering.
-- [x] Change the decay of the markers because sometimes Rviz doesn't erase them. Maybe delete all at the end?
-- [x] Update distance_threshold / method_threshold parameters. Too confusion.
-- [ ] Restore default parameters in runtime.
-- [x] Convert nodes to LifeCycleNodes.
-
 [Ubuntu]: https://ubuntu.com/
 [ROS2]: https://docs.ros.org/en/humble/
 [Rviz2]: https://github.com/ros2/rviz

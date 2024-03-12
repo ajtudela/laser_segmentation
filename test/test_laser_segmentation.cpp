@@ -138,6 +138,7 @@ class LaserSegmentationColorTest
 TEST_P(LaserSegmentationColorTest, color)
 {
   auto node = std::make_shared<laserSegmentationFixture>();
+  node->configure();
   auto index = std::get<0>(GetParam());
   auto expected_color = std::get<1>(GetParam());
   auto color = node->get_palette_color(index);
@@ -164,6 +165,7 @@ INSTANTIATE_TEST_SUITE_P(
 TEST(LaserSegmentationTest, createVizPoints) {
   // Create the node
   auto node = std::make_shared<laserSegmentationFixture>();
+  node->configure();
   // Set a segment list with one segment of 3 points
   std_msgs::msg::Header header;
   header.frame_id = "laser_frame";
@@ -208,7 +210,6 @@ TEST(LaserSegmentationTest, createVizPoints) {
 TEST(LaserSegmentationTest, filterSegments) {
   // Create the node
   auto node = std::make_shared<laserSegmentationFixture>();
-
   // Set the parameters
   nav2_util::declare_parameter_if_not_declared(
     node, "min_points_segment", rclcpp::ParameterValue(1));
@@ -303,26 +304,31 @@ TEST(LaserSegmentationTest, filterSegments) {
   // Check the filtered segments
   EXPECT_EQ(filtered_segments.size(), 0);
 
-  // Set a segment list with 2 segment with 2 points
+  // Set a segment list with several segments
   segment_list.clear();
   segment.clear();
   segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
   segment.add_point(slg::Point2D(1.0, 1.0, slg::BACKGROUND));
-  std::cout << "Width: " << segment.width_squared() << std::endl;
-  std::cout << "Centroid: " << segment.centroid().x << " " << segment.centroid().y << std::endl;
   segment_list.push_back(segment);
   segment.clear();
   segment.add_point(slg::Point2D(2.0, 2.0, slg::BACKGROUND));
   segment.add_point(slg::Point2D(3.0, 3.0, slg::BACKGROUND));
-  std::cout << "Width: " << segment.width_squared() << std::endl;
-  std::cout << "Centroid: " << segment.centroid().x << " " << segment.centroid().y << std::endl;
+  segment.add_point(slg::Point2D(4.0, 4.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  segment.clear();
+  segment.add_point(slg::Point2D(5.0, 5.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(6.0, 6.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(7.0, 7.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(8.0, 8.0, slg::BACKGROUND));
   segment_list.push_back(segment);
   // Filter the segments
   filtered_segments = node->filter_segments(segment_list);
   // Check the filtered segments
   EXPECT_EQ(filtered_segments.size(), 1);
-  EXPECT_EQ(filtered_segments[0].centroid().x, 2.5);
-  EXPECT_EQ(filtered_segments[0].centroid().y, 2.5);
+  EXPECT_EQ(filtered_segments[0].centroid().x, 3.0);
+  EXPECT_EQ(filtered_segments[0].centroid().y, 3.0);
 }
 
 int main(int argc, char ** argv)
