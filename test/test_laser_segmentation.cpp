@@ -211,11 +211,11 @@ TEST(LaserSegmentationTest, filterSegments) {
 
   // Set the parameters
   nav2_util::declare_parameter_if_not_declared(
-    node, "min_points_segment", rclcpp::ParameterValue(2));
+    node, "min_points_segment", rclcpp::ParameterValue(1));
   nav2_util::declare_parameter_if_not_declared(
-    node, "max_points_segment", rclcpp::ParameterValue(4));
+    node, "max_points_segment", rclcpp::ParameterValue(3));
   nav2_util::declare_parameter_if_not_declared(
-    node, "min_avg_distance_from_sensor", rclcpp::ParameterValue(0.1));
+    node, "min_avg_distance_from_sensor", rclcpp::ParameterValue(1.0));
   nav2_util::declare_parameter_if_not_declared(
     node, "max_avg_distance_from_sensor", rclcpp::ParameterValue(10.0));
   nav2_util::declare_parameter_if_not_declared(
@@ -228,19 +228,15 @@ TEST(LaserSegmentationTest, filterSegments) {
     node, "noise_reduction", rclcpp::ParameterValue(0.1));
   node->configure();
 
-  // Set a segment list with 1 segments
+  // Set a segment list with 0 segments
   std::vector<slg::Segment2D> segment_list;
-  slg::Segment2D segment;
-  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
-  segment_list.push_back(segment);
-  // Filter the segments
   auto filtered_segments = node->filter_segments(segment_list);
   // Check the filtered segments
   EXPECT_EQ(filtered_segments.size(), 0);
 
   // Set a segment list with 4 segments of 1 point
   segment_list.clear();
-  segment.clear();
+  slg::Segment2D segment;
   segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
   segment_list.push_back(segment);
   segment_list.push_back(segment);
@@ -251,60 +247,82 @@ TEST(LaserSegmentationTest, filterSegments) {
   // Check the filtered segments
   EXPECT_EQ(filtered_segments.size(), 0);
 
-  // Set a segment list with 1 segment with centroid below the minimum distance
+  // Set a segment list with 2 segments with centroid below the minimum distance
   segment_list.clear();
   segment.clear();
   segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
   segment_list.push_back(segment);
+  segment.clear();
+  segment.add_point(slg::Point2D(0.5, 0.5, slg::BACKGROUND));
+  segment_list.push_back(segment);
   // Filter the segments
   filtered_segments = node->filter_segments(segment_list);
   // Check the filtered segments
   EXPECT_EQ(filtered_segments.size(), 0);
 
-  // Set a segment list with 1 segment with centroid above the maximum distance
+  // Set a segment list with 2 segments with centroid above the maximum distance
   segment_list.clear();
   segment.clear();
   segment.add_point(slg::Point2D(11.0, 11.0, slg::BACKGROUND));
   segment_list.push_back(segment);
-  // Filter the segments
-  filtered_segments = node->filter_segments(segment_list);
-  // Check the filtered segments
-  EXPECT_EQ(filtered_segments.size(), 0);
-
-  // Set a segment list with 1 segment with width below the minimum width
-  segment_list.clear();
   segment.clear();
-  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
-  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(12.0, 12.0, slg::BACKGROUND));
   segment_list.push_back(segment);
   // Filter the segments
   filtered_segments = node->filter_segments(segment_list);
   // Check the filtered segments
   EXPECT_EQ(filtered_segments.size(), 0);
 
-  // Set a segment list with 1 segment with width above the maximum width
+  // Set a segment list with 2 segments with width below the minimum width
   segment_list.clear();
   segment.clear();
   segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
-  segment.add_point(slg::Point2D(10.0, 10.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
   segment_list.push_back(segment);
-  // Filter the segments
-  filtered_segments = node->filter_segments(segment_list);
-  // Check the filtered segments
-  EXPECT_EQ(filtered_segments.size(), 0);
-
-  // Set a segment list with 1 segment with 2 points
-  segment_list.clear();
   segment.clear();
-  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(1.0, 1.0, slg::BACKGROUND));
   segment.add_point(slg::Point2D(1.0, 1.0, slg::BACKGROUND));
   segment_list.push_back(segment);
   // Filter the segments
   filtered_segments = node->filter_segments(segment_list);
   // Check the filtered segments
+  EXPECT_EQ(filtered_segments.size(), 0);
+
+  // Set a segment list with 2 segments with width above the maximum width
+  segment_list.clear();
+  segment.clear();
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(10.0, 10.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  segment.clear();
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(15.0, 15.0, slg::BACKGROUND));
+  segment_list.push_back(segment);
+  // Filter the segments
+  filtered_segments = node->filter_segments(segment_list);
+  // Check the filtered segments
+  EXPECT_EQ(filtered_segments.size(), 0);
+
+  // Set a segment list with 2 segment with 2 points
+  segment_list.clear();
+  segment.clear();
+  segment.add_point(slg::Point2D(0.0, 0.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(1.0, 1.0, slg::BACKGROUND));
+  std::cout << "Width: " << segment.width_squared() << std::endl;
+  std::cout << "Centroid: " << segment.centroid().x << " " << segment.centroid().y << std::endl;
+  segment_list.push_back(segment);
+  segment.clear();
+  segment.add_point(slg::Point2D(2.0, 2.0, slg::BACKGROUND));
+  segment.add_point(slg::Point2D(3.0, 3.0, slg::BACKGROUND));
+  std::cout << "Width: " << segment.width_squared() << std::endl;
+  std::cout << "Centroid: " << segment.centroid().x << " " << segment.centroid().y << std::endl;
+  segment_list.push_back(segment);
+  // Filter the segments
+  filtered_segments = node->filter_segments(segment_list);
+  // Check the filtered segments
   EXPECT_EQ(filtered_segments.size(), 1);
-  EXPECT_EQ(filtered_segments[0].centroid().x, 0.5);
-  EXPECT_EQ(filtered_segments[0].centroid().y, 0.5);
+  EXPECT_EQ(filtered_segments[0].centroid().x, 2.5);
+  EXPECT_EQ(filtered_segments[0].centroid().y, 2.5);
 }
 
 int main(int argc, char ** argv)
