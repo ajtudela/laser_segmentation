@@ -16,6 +16,10 @@ In the two implementation mentioned above the jump distance threshold is fixed. 
 
 Includes a dynamic reconfigure server parameter to change online the configuration of the algorithms and the filtering.
 
+| *Laser scan* | *Segments* |
+| :------------: | :-----------------------: |
+| ![LaserScan](doc/laser.png)  | ![Segments](doc/segments.png) |
+
 **Keywords:** ROS2, laser, segmentation, clustering
 
 **Author: Alberto Tudela<br />**
