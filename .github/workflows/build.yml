@@ -1,0 +1,45 @@
+# Simple set of rules for GitHub actions integration with a ROS project
+#
+
+name: Build
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup ROS 2
+        uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: humble
+      - name: Install dependencies
+        uses: ros-tooling/action-ros-ci@v0.3
+        with:
+          package-name: laser_segmentation
+          target-ros2-distro: humble
+          vcs-repo-file-url: https://raw.githubusercontent.com/ajtudela/laser_segmentation/dev/.github/repos.repos
+          colcon-defaults: |
+            {
+              "build": {
+                "mixin": ["coverage-gcc", "coverage-pytest"]
+              },
+              "test": {
+                "mixin": ["coverage-pytest"]
+              }
+            }
+          skip-tests: false
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ros_ws/lcov/total_coverage.info,ros_ws/coveragepy/.coverage
+          flags: unittests
+          name: codecov-umbrella
+          slug: ajtudela/laser_segmentation

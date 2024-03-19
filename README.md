@@ -1,6 +1,9 @@
 # laser_segmentation
 ![ROS2](https://img.shields.io/badge/ros2-humble-blue?logo=ros&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-green)
+![License](https://img.shields.io/github/license/ajtudela/laser_segmentation)
+[![Build](https://github.com/ajtudela/laser_segmentation/actions/workflows/build.yml/badge.svg?branch=dev)](https://github.com/ajtudela/laser_segmentation/actions/workflows/build.yml)
+[![codecov](https://codecov.io/gh/ajtudela/laser_segmentation/graph/badge.svg?token=R48HZO62SQ)](https://codecov.io/gh/ajtudela/laser_segmentation)
+
 
 ## Overview
 
@@ -12,6 +15,10 @@ Implementation of differents algorithms for segmentation of laserscans, splittin
 In the two implementation mentioned above the jump distance threshold is fixed. However, a dynamic jump distance threshold can be calculated using methods of Lee (Lee, 2001), Dietmayer (Dietmayer, et al., 2001) and Santos (Santos, et al., 2003). See the parameters list below to change between them.
 
 Includes a dynamic reconfigure server parameter to change online the configuration of the algorithms and the filtering.
+
+| *Laser scan* | *Segments* |
+| :------------: | :-----------------------: |
+| ![LaserScan](doc/laser.png)  | ![Segments](doc/segments.png) |
 
 **Keywords:** ROS2, laser, segmentation, clustering
 
@@ -124,14 +131,6 @@ Segmentation of the laserscans.
 * **`noise_reduction`** (double, default: 0.3)
 
 	Parameter for noise reduction in "Santos" and "Dietmayer" algorithms.
-
-## Future work
-- [ ] Add Delaunay triangulation method based on "Human Detection using Multimodal and Multidimensional Features" (Spinello).
-- [ ] Add Agglomerative Hierarchical Clustering.
-- [x] Change the decay of the markers because sometimes Rviz doesn't erase them. Maybe delete all at the end?
-- [x] Update distance_threshold / method_threshold parameters. Too confusion.
-- [ ] Restore default parameters in runtime.
-- [ ] Convert nodes to LifeCycleNodes.
 
 [Ubuntu]: https://ubuntu.com/
 [ROS2]: https://docs.ros.org/en/humble/

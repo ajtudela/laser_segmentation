@@ -12,30 +12,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef LASER_SEGMENTATION__SEGMENTATION__SEGMENTATION_HPP_
-#define LASER_SEGMENTATION__SEGMENTATION__SEGMENTATION_HPP_
+#ifndef LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_MERGE_HPP_
+#define LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_MERGE_HPP_
 
 // C++
 #include <memory>
 #include <string>
 #include <vector>
 
-// SIMPLE LASER GEOMETRY
-#include "slg_msgs/point2D.hpp"
-#include "slg_msgs/segment2D.hpp"
+#include "laser_segmentation/segmentation/jump_distance.hpp"
 
 /**
- * @brief Abstract class for a generic segmentation algorithm.
+ * @brief Jump distance segmentation algorithm which merge segments
+ * by checking against the last point of preceding segments.
  *
  */
-class Segmentation
+class JumpDistanceSegmentationMerge : public JumpDistanceSegmentation
 {
 public:
   /**
-   * @brief Destroy the Segmentation object
+   * @brief Construct a new Jump Distance Segmentation Merge object
    *
    */
-  virtual ~Segmentation() {}
+  JumpDistanceSegmentationMerge() = default;
+
+  /**
+   * @brief Destroy the Jump Distance Segmentation Merge object
+   *
+   */
+  ~JumpDistanceSegmentationMerge() override = default;
 
   /**
    * @brief Initialize the segmentation algorithm.
@@ -46,32 +51,22 @@ public:
    * @param noise_reduction Parameter for noise reduction (if applicable).
    * @param method The method to be used for segmentation.
    */
-  virtual void initialize_segmentation(
+  void initialize_segmentation(
     double distance, double angle_resolution,
-    double noise_reduction, std::string method = "") = 0;
+    double noise_reduction, std::string method = "") override;
 
   /**
-   * @brief Perform the segmentation of the given list of points.
+   * @brief Perform the segmentation of the given list of points
+   * into a list of segments using Jump Distance Clustering.
    *
    * @param points The list of points to be segmented.
    * @param segments The resulting list of segments.
    */
-  virtual void perform_segmentation(
+  void perform_segmentation(
     const std::vector<slg::Point2D> points,
-    std::vector<slg::Segment2D> & segments) = 0;
+    std::vector<slg::Segment2D> & segments) override;
 
-protected:
-  /**
-   * @brief Check if the point is valid (i.e. not out-of-range)
-   *
-   * @param point The point to be checked.
-   * @return true If the point is valid.
-   * @return false If the point is not valid.
-   */
-  inline bool is_valid(const slg::Point2D point)
-  {
-    return !point.isnan();
-  }
+  typedef std::shared_ptr<JumpDistanceSegmentationMerge> SharedPtr;
 };
 
-#endif  // LASER_SEGMENTATION__SEGMENTATION__SEGMENTATION_HPP_
+#endif  // LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_MERGE_HPP_

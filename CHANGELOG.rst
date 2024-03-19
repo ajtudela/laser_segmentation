@@ -2,6 +2,18 @@
 Changelog for package laser_segmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.0 (08-03-2024)
+------------------
+* Improve formatting.
+* Improve documentation of source.
+* Converted to Lifecycle node.
+* Converted to component.
+* Rename header and source files.
+* Move parameters to new class: parameterHandler.
+* Rename show_visualization to create_segment_viz_points.
+* Fix jump distance merge.
+* Add unit testing.
+
 2.1.2 (23-06-2023)
 ------------------
 * Rename visualization topic.
