@@ -14,6 +14,9 @@
 
 #include "laser_segmentation/segmentation/jump_distance.hpp"
 
+namespace laser_segmentation
+{
+
 void JumpDistanceSegmentation::initialize_segmentation(
   double jump_distance,
   double angle_resolution,
@@ -151,3 +154,5 @@ double JumpDistanceSegmentation::calculate_santos_threshold(
   return c0 + (c1 * minRange * tan(beta)) /
          (cos(angle_resolution_ / 2) - sin(angle_resolution_ / 2));
 }
+
+}  // namespace laser_segmentation

@@ -22,6 +22,9 @@
 
 #include "laser_segmentation/segmentation/segmentation.hpp"
 
+namespace laser_segmentation
+{
+
 /**
  * @brief Classic jump distance segmentation algorithm.
  *
@@ -137,5 +140,7 @@ protected:
    */
   std::string threshold_method_;
 };
+
+}  // namespace laser_segmentation
 
 #endif  // LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_HPP_

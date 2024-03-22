@@ -18,7 +18,7 @@
 #include "laser_segmentation/segmentation/jump_distance.hpp"
 #include "laser_segmentation/segmentation/jump_distance_merge.hpp"
 
-class JDistanceFixture : public JumpDistanceSegmentation
+class JDistanceFixture : public laser_segmentation::JumpDistanceSegmentation
 {
 public:
   JDistanceFixture()
@@ -70,7 +70,7 @@ public:
   }
 };
 
-class JDistanceMergeFixture : public JumpDistanceSegmentationMerge
+class JDistanceMergeFixture : public laser_segmentation::JumpDistanceSegmentationMerge
 {
 public:
   JDistanceMergeFixture()

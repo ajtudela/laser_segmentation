@@ -22,6 +22,9 @@
 
 #include "laser_segmentation/segmentation/jump_distance.hpp"
 
+namespace laser_segmentation
+{
+
 /**
  * @brief Jump distance segmentation algorithm which merge segments
  * by checking against the last point of preceding segments.
@@ -68,5 +71,7 @@ public:
 
   typedef std::shared_ptr<JumpDistanceSegmentationMerge> SharedPtr;
 };
+
+}  // namespace laser_segmentation
 
 #endif  // LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_MERGE_HPP_

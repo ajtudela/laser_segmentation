@@ -14,6 +14,9 @@
 
 #include "laser_segmentation/segmentation/jump_distance_merge.hpp"
 
+namespace laser_segmentation
+{
+
 void JumpDistanceSegmentationMerge::initialize_segmentation(
   double jump_distance,
   double angle_resolution,
@@ -119,3 +122,5 @@ void JumpDistanceSegmentationMerge::perform_segmentation(
     segments.back().set_next_segment(first_segment.first_point());
   }
 }
+
+}  // namespace laser_segmentation

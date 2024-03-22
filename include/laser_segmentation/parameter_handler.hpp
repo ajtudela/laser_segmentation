@@ -25,6 +25,9 @@
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "nav2_util/node_utils.hpp"
 
+namespace laser_segmentation
+{
+
 struct Parameters
 {
   int min_points_segment;
@@ -77,5 +80,7 @@ protected:
   Parameters params_;
   rclcpp::Logger logger_ {rclcpp::get_logger("laser_segmentation")};
 };
+
+}  // namespace laser_segmentation
 
 #endif  // LASER_SEGMENTATION__PARAMETER_HANDLER_HPP_
