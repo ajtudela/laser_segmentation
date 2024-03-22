@@ -14,12 +14,15 @@
 
 #include "laser_segmentation/laser_segmentation.hpp"
 
-laserSegmentation::laserSegmentation(const rclcpp::NodeOptions & options)
+namespace laser_segmentation
+{
+
+LaserSegmentation::LaserSegmentation(const rclcpp::NodeOptions & options)
 : rclcpp_lifecycle::LifecycleNode("laser_segmentation", "", options)
 {
 }
 
-CallbackReturn laserSegmentation::on_configure(const rclcpp_lifecycle::State &)
+CallbackReturn LaserSegmentation::on_configure(const rclcpp_lifecycle::State &)
 {
   // Handles storage and dynamic configuration of parameters.
   // Returns pointer to data current param settings.
@@ -48,14 +51,14 @@ CallbackReturn laserSegmentation::on_configure(const rclcpp_lifecycle::State &)
   scan_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
     params_->scan_topic,
     default_qos,
-    std::bind(&laserSegmentation::scan_callback, this, std::placeholders::_1));
+    std::bind(&LaserSegmentation::scan_callback, this, std::placeholders::_1));
 
   RCLCPP_INFO(this->get_logger(), "Configured laser segmentation node");
 
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn laserSegmentation::on_activate(const rclcpp_lifecycle::State & state)
+CallbackReturn LaserSegmentation::on_activate(const rclcpp_lifecycle::State & state)
 {
   LifecycleNode::on_activate(state);
   RCLCPP_INFO(this->get_logger(), "Activating the node...");
@@ -65,7 +68,7 @@ CallbackReturn laserSegmentation::on_activate(const rclcpp_lifecycle::State & st
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn laserSegmentation::on_deactivate(const rclcpp_lifecycle::State & state)
+CallbackReturn LaserSegmentation::on_deactivate(const rclcpp_lifecycle::State & state)
 {
   LifecycleNode::on_deactivate(state);
   RCLCPP_INFO(this->get_logger(), "Deactivating the node...");
@@ -75,7 +78,7 @@ CallbackReturn laserSegmentation::on_deactivate(const rclcpp_lifecycle::State & 
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn laserSegmentation::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
+CallbackReturn LaserSegmentation::on_cleanup(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(this->get_logger(), "Cleaning the node...");
 
@@ -87,7 +90,7 @@ CallbackReturn laserSegmentation::on_cleanup(const rclcpp_lifecycle::State & /*s
   return CallbackReturn::SUCCESS;
 }
 
-CallbackReturn laserSegmentation::on_shutdown(const rclcpp_lifecycle::State & state)
+CallbackReturn LaserSegmentation::on_shutdown(const rclcpp_lifecycle::State & state)
 {
   RCLCPP_INFO(this->get_logger(), "Shutdown the node from state %s.", state.label().c_str());
 
@@ -98,7 +101,7 @@ CallbackReturn laserSegmentation::on_shutdown(const rclcpp_lifecycle::State & st
   return CallbackReturn::SUCCESS;
 }
 
-void laserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan_msg)
+void LaserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan_msg)
 {
   std::lock_guard<std::mutex> param_lock(param_handler_->getMutex());
 
@@ -156,7 +159,7 @@ void laserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
     create_segment_viz_points(scan_msg->header, segment_filtered_list));
 }
 
-std::vector<slg::Segment2D> laserSegmentation::filter_segments(
+std::vector<slg::Segment2D> LaserSegmentation::filter_segments(
   const std::vector<slg::Segment2D> & segments)
 {
   std::vector<slg::Segment2D> filtered_segments;
@@ -192,7 +195,7 @@ std::vector<slg::Segment2D> laserSegmentation::filter_segments(
   return filtered_segments;
 }
 
-visualization_msgs::msg::MarkerArray laserSegmentation::create_segment_viz_points(
+visualization_msgs::msg::MarkerArray LaserSegmentation::create_segment_viz_points(
   std_msgs::msg::Header header,
   std::vector<slg::Segment2D> segment_list)
 {
@@ -273,7 +276,7 @@ visualization_msgs::msg::MarkerArray laserSegmentation::create_segment_viz_point
   return viz_array;
 }
 
-std_msgs::msg::ColorRGBA laserSegmentation::get_parula_color(unsigned int index, unsigned int max)
+std_msgs::msg::ColorRGBA LaserSegmentation::get_parula_color(unsigned int index, unsigned int max)
 {
   std_msgs::msg::ColorRGBA color;
   int div = round(256 / max);
@@ -284,7 +287,7 @@ std_msgs::msg::ColorRGBA laserSegmentation::get_parula_color(unsigned int index,
   return color;
 }
 
-std_msgs::msg::ColorRGBA laserSegmentation::get_palette_color(unsigned int index)
+std_msgs::msg::ColorRGBA LaserSegmentation::get_palette_color(unsigned int index)
 {
   std_msgs::msg::ColorRGBA color;
   switch (index % 8) {
@@ -302,5 +305,7 @@ std_msgs::msg::ColorRGBA laserSegmentation::get_palette_color(unsigned int index
   return color;
 }
 
+}  // namespace laser_segmentation
+
 #include "rclcpp_components/register_node_macro.hpp"
-RCLCPP_COMPONENTS_REGISTER_NODE(laserSegmentation)
+RCLCPP_COMPONENTS_REGISTER_NODE(laser_segmentation::LaserSegmentation)

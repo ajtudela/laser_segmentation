@@ -24,6 +24,9 @@
 #include "slg_msgs/point2D.hpp"
 #include "slg_msgs/segment2D.hpp"
 
+namespace laser_segmentation
+{
+
 /**
  * @brief Abstract class for a generic segmentation algorithm.
  *
@@ -73,5 +76,7 @@ protected:
     return !point.isnan();
   }
 };
+
+}  // namespace laser_segmentation
 
 #endif  // LASER_SEGMENTATION__SEGMENTATION__SEGMENTATION_HPP_

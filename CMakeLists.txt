@@ -66,7 +66,7 @@ add_library(${library_name} SHARED ${source})
 ament_target_dependencies(${library_name} ${dependencies})
 target_link_libraries(${library_name})
 
-rclcpp_components_register_nodes(${library_name} "composition::LaserSegmentation")
+rclcpp_components_register_nodes(${library_name} "laser_segmentation::LaserSegmentation")
 
 # ############
 # # Install ##

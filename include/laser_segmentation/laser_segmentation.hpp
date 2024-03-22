@@ -41,7 +41,15 @@
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
-class laserSegmentation : public rclcpp_lifecycle::LifecycleNode
+namespace laser_segmentation
+{
+
+/**
+ * @brief laser_segmentation::LaserSegmentation class is a ROS2 node that subscribes to a laser scan
+ * topic and publishes the segments found in the scan.
+ *
+ */
+class LaserSegmentation : public rclcpp_lifecycle::LifecycleNode
 {
 public:
   /**
@@ -49,13 +57,13 @@ public:
    *
    * @param options Node options
    */
-  explicit laserSegmentation(const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
+  explicit LaserSegmentation(const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
 
   /**
    * @brief Destroy the laser Segmentation object
    *
    */
-  ~laserSegmentation() = default;
+  ~LaserSegmentation() = default;
 
   /**
    * @brief Configure the node
@@ -150,5 +158,7 @@ protected:
   Parameters * params_;
   std::shared_ptr<Segmentation> segmentation_;
 };
+
+}  // namespace laser_segmentation
 
 #endif  // LASER_SEGMENTATION__LASER_SEGMENTATION_HPP_

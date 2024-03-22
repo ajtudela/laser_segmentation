@@ -32,7 +32,7 @@ TEST(LaserSegmentationTest, integration) {
   auto pub_thread = std::thread([&]() {rclcpp::spin(pub_node->get_node_base_interface());});
 
   // Create and configure the laser_segmentation node
-  auto seg_node = std::make_shared<laserSegmentation>();
+  auto seg_node = std::make_shared<laser_segmentation::LaserSegmentation>();
   // Set some parameters
   nav2_util::declare_parameter_if_not_declared(
     seg_node, "min_points_segment", rclcpp::ParameterValue(1));

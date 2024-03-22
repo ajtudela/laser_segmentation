@@ -16,36 +16,36 @@
 #include "rclcpp/rclcpp.hpp"
 #include "laser_segmentation/laser_segmentation.hpp"
 
-class laserSegmentationFixture : public laserSegmentation
+class laserSegmentationFixture : public laser_segmentation::LaserSegmentation
 {
 public:
   laserSegmentationFixture()
-  : laserSegmentation() {}
+  : LaserSegmentation() {}
 
   void scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr msg)
   {
-    laserSegmentation::scan_callback(msg);
+    LaserSegmentation::scan_callback(msg);
   }
 
   std::vector<slg::Segment2D> filter_segments(const std::vector<slg::Segment2D> & segments)
   {
-    return laserSegmentation::filter_segments(segments);
+    return LaserSegmentation::filter_segments(segments);
   }
 
   visualization_msgs::msg::MarkerArray create_segment_viz_points(
     std_msgs::msg::Header header, std::vector<slg::Segment2D> segment_list)
   {
-    return laserSegmentation::create_segment_viz_points(header, segment_list);
+    return LaserSegmentation::create_segment_viz_points(header, segment_list);
   }
 
   std_msgs::msg::ColorRGBA get_parula_color(unsigned int index, unsigned int max)
   {
-    return laserSegmentation::get_parula_color(index, max);
+    return LaserSegmentation::get_parula_color(index, max);
   }
 
   std_msgs::msg::ColorRGBA get_palette_color(unsigned int index)
   {
-    return laserSegmentation::get_palette_color(index);
+    return LaserSegmentation::get_palette_color(index);
   }
 };
 

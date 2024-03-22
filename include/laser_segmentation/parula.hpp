@@ -15,6 +15,9 @@
 #ifndef LASER_SEGMENTATION__PARULA_HPP_
 #define LASER_SEGMENTATION__PARULA_HPP_
 
+namespace laser_segmentation
+{
+
 float parula[256][3] = {
   {0.2081, 0.1663, 0.5292},
   {0.2091, 0.1721, 0.5411},
@@ -272,5 +275,7 @@ float parula[256][3] = {
   {0.9710, 0.9673, 0.0651},
   {0.9736, 0.9752, 0.0597},
   {0.9763, 0.9831, 0.0538}};
+
+}  // namespace laser_segmentation
 
 #endif  // LASER_SEGMENTATION__PARULA_HPP_

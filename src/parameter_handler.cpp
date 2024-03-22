@@ -21,6 +21,9 @@
 
 #include "laser_segmentation/parameter_handler.hpp"
 
+namespace laser_segmentation
+{
+
 using nav2_util::declare_parameter_if_not_declared;
 using rcl_interfaces::msg::ParameterType;
 
@@ -266,3 +269,5 @@ ParameterHandler::dynamicParametersCallback(std::vector<rclcpp::Parameter> param
   result.successful = true;
   return result;
 }
+
+}  // namespace laser_segmentation
