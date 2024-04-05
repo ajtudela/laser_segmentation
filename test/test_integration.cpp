@@ -58,8 +58,6 @@ TEST(LaserSegmentationTest, integration) {
   scan.ranges.push_back(3.0);
   scan.ranges.push_back(3.2);
   scan.ranges.push_back(12.0);
-  // Publish the message
-  scan_pub->publish(scan);
 
   // Create the segments subscriber node
   auto sub_node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("segment_subscriber");
@@ -73,6 +71,9 @@ TEST(LaserSegmentationTest, integration) {
       RCLCPP_INFO(sub_node->get_logger(), "Segment received: %ld", msg.segments.size());
     });
   auto sub_thread = std::thread([&]() {rclcpp::spin(sub_node->get_node_base_interface());});
+
+  // Publish the message
+  scan_pub->publish(scan);
 
   // Spin the laser_segmentation node
   rclcpp::spin_some(seg_node->get_node_base_interface());
