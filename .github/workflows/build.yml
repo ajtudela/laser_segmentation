@@ -24,7 +24,7 @@ jobs:
         with:
           package-name: laser_segmentation
           target-ros2-distro: humble
-          vcs-repo-file-url: https://raw.githubusercontent.com/ajtudela/laser_segmentation/dev/.github/repos.repos
+          vcs-repo-file-url: ./.github/repos.repos
           colcon-defaults: |
             {
               "build": {
