@@ -64,9 +64,11 @@ TEST(LaserSegmentationTest, integration) {
   sub_node->configure();
   sub_node->activate();
   // Create a subscriber for the segments
+  bool msg_received = false;
   auto seg_sub = sub_node->create_subscription<slg_msgs::msg::SegmentArray>(
     "segments", 1,
     [&](const slg_msgs::msg::SegmentArray msg) {
+      msg_received = true;
       EXPECT_EQ(msg.segments.size(), 1);
       RCLCPP_INFO(sub_node->get_logger(), "Segment received: %ld", msg.segments.size());
     });
@@ -82,6 +84,7 @@ TEST(LaserSegmentationTest, integration) {
   // and the segment should have a publisher
   EXPECT_EQ(scan_pub->get_subscription_count(), 1);
   EXPECT_EQ(seg_sub->get_publisher_count(), 1);
+  EXPECT_TRUE(msg_received);
 
   // Deactivate the nodes
   seg_node->deactivate();
