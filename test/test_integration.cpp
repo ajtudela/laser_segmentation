@@ -58,21 +58,24 @@ TEST(LaserSegmentationTest, integration) {
   scan.ranges.push_back(3.0);
   scan.ranges.push_back(3.2);
   scan.ranges.push_back(12.0);
-  // Publish the message
-  scan_pub->publish(scan);
 
   // Create the segments subscriber node
   auto sub_node = std::make_shared<rclcpp_lifecycle::LifecycleNode>("segment_subscriber");
   sub_node->configure();
   sub_node->activate();
   // Create a subscriber for the segments
+  bool msg_received = false;
   auto seg_sub = sub_node->create_subscription<slg_msgs::msg::SegmentArray>(
     "segments", 1,
     [&](const slg_msgs::msg::SegmentArray msg) {
+      msg_received = true;
       EXPECT_EQ(msg.segments.size(), 1);
       RCLCPP_INFO(sub_node->get_logger(), "Segment received: %ld", msg.segments.size());
     });
   auto sub_thread = std::thread([&]() {rclcpp::spin(sub_node->get_node_base_interface());});
+
+  // Publish the message
+  scan_pub->publish(scan);
 
   // Spin the laser_segmentation node
   rclcpp::spin_some(seg_node->get_node_base_interface());
@@ -81,6 +84,7 @@ TEST(LaserSegmentationTest, integration) {
   // and the segment should have a publisher
   EXPECT_EQ(scan_pub->get_subscription_count(), 1);
   EXPECT_EQ(seg_sub->get_publisher_count(), 1);
+  EXPECT_TRUE(msg_received);
 
   // Deactivate the nodes
   seg_node->deactivate();

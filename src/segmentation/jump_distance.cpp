@@ -76,21 +76,23 @@ void JumpDistanceSegmentation::perform_segmentation(
   segments.push_back(current_segment);
 
   // Check if last and first segments belongs to the same segment
-  slg::Segment2D first_segment = segments.front();
-  slg::Segment2D last_segment = segments.back();
-  // Check if the point belong to the same segment or we have to discard it.
-  // Remember that the points are radially sorted.
-  if (!is_jump_between(last_segment, first_segment)) {
-    last_segment.merge(first_segment);
-    // Insert the last segment as the first one
-    segments[0] = last_segment;
-    // And remove the last one
-    segments.pop_back();
-  } else {
-    // Fix the prior segment of the first segment
-    segments.front().set_prior_segment(last_segment.last_point());
-    // Fix the next segment of the last segment
-    segments.back().set_next_segment(first_segment.first_point());
+  if (segments.size() > 1) {
+    slg::Segment2D first_segment = segments.front();
+    slg::Segment2D last_segment = segments.back();
+    // Check if the point belong to the same segment or we have to discard it.
+    // Remember that the points are radially sorted.
+    if (!is_jump_between(last_segment, first_segment)) {
+      last_segment.merge(first_segment);
+      // Insert the last segment as the first one
+      segments[0] = last_segment;
+      // And remove the last one
+      segments.pop_back();
+    } else {
+      // Fix the prior segment of the first segment
+      segments.front().set_prior_segment(last_segment.last_point());
+      // Fix the next segment of the last segment
+      segments.back().set_next_segment(first_segment.first_point());
+    }
   }
 }
 
