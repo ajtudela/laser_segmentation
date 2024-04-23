@@ -4,10 +4,10 @@
   <name>laser_segmentation</name>
   <version>3.0.0</version>
   <description>Implementation of algorithms for segmentation of laserscans.</description>
-  <maintainer email="ajtudela@gmail.com">Alberto J. Tudela Roldán</maintainer>
+  <maintainer email="ajtudela@gmail.com">Alberto Tudela</maintainer>
   <maintainer email="manolofc@gmail.com">Manuel Fernandez-Carmona</maintainer>
   <license>Apache-2.0</license>
-  <author email="ajtudela@gmail.com">Alberto J. Tudela Roldán</author>
+  <author email="ajtudela@gmail.com">Alberto Tudela</author>
   <buildtool_depend>ament_cmake</buildtool_depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_components</depend>
