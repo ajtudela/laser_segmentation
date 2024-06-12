@@ -23,7 +23,6 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
-#include "nav2_util/node_utils.hpp"
 
 namespace laser_segmentation
 {
@@ -73,6 +72,27 @@ protected:
    */
   rcl_interfaces::msg::SetParametersResult
   dynamicParametersCallback(std::vector<rclcpp::Parameter> parameters);
+
+/**
+ * @brief Declares static ROS2 parameter and sets it to a given value if it was not already declared.
+ *
+ * @param node A node in which given parameter to be declared
+ * @param param_name The name of parameter
+ * @param default_value Parameter value to initialize with
+ * @param parameter_descriptor Parameter descriptor (optional)
+*/
+  template<typename NodeT>
+  void declare_parameter_if_not_declared(
+    NodeT node,
+    const std::string & param_name,
+    const rclcpp::ParameterValue & default_value,
+    const rcl_interfaces::msg::ParameterDescriptor & parameter_descriptor =
+    rcl_interfaces::msg::ParameterDescriptor())
+  {
+    if (!node->has_parameter(param_name)) {
+      node->declare_parameter(param_name, default_value, parameter_descriptor);
+    }
+  }
 
   // Dynamic parameters handler
   std::mutex mutex_;

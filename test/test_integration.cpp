@@ -34,10 +34,8 @@ TEST(LaserSegmentationTest, integration) {
   // Create and configure the laser_segmentation node
   auto seg_node = std::make_shared<laser_segmentation::LaserSegmentation>();
   // Set some parameters
-  nav2_util::declare_parameter_if_not_declared(
-    seg_node, "min_points_segment", rclcpp::ParameterValue(1));
-  nav2_util::declare_parameter_if_not_declared(
-    seg_node, "max_points_segment", rclcpp::ParameterValue(3));
+  seg_node->declare_parameter("min_points_segment", rclcpp::ParameterValue(1));
+  seg_node->declare_parameter("max_points_segment", rclcpp::ParameterValue(3));
   seg_node->configure();
   seg_node->activate();
 

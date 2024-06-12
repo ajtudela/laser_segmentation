@@ -50,11 +50,11 @@ endif()
 # # Find ament macros and libraries
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
-find_package(nav2_util REQUIRED)
 find_package(slg_msgs REQUIRED) # formerly simple_laser_geometry
 
 # ##########
@@ -75,11 +75,11 @@ set(source
 
 set(dependencies
   rclcpp
+  rclcpp_lifecycle
   rclcpp_components
   std_msgs
   sensor_msgs
   visualization_msgs
-  nav2_util
   slg_msgs
 )
 
