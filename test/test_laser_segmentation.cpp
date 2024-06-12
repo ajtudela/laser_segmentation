@@ -53,8 +53,7 @@ TEST(LaserSegmentationTest, configure) {
   // Create the node
   auto node = std::make_shared<laserSegmentationFixture>();
   // Set the default segmentation type "jump_distance"
-  nav2_util::declare_parameter_if_not_declared(
-    node, "segmentation_type", rclcpp::ParameterValue("jump_distance"));
+  node->declare_parameter("segmentation_type", rclcpp::ParameterValue("jump_distance"));
   node->configure();
   node->activate();
   // Call an empty callback
@@ -211,22 +210,14 @@ TEST(LaserSegmentationTest, filterSegments) {
   // Create the node
   auto node = std::make_shared<laserSegmentationFixture>();
   // Set the parameters
-  nav2_util::declare_parameter_if_not_declared(
-    node, "min_points_segment", rclcpp::ParameterValue(1));
-  nav2_util::declare_parameter_if_not_declared(
-    node, "max_points_segment", rclcpp::ParameterValue(3));
-  nav2_util::declare_parameter_if_not_declared(
-    node, "min_avg_distance_from_sensor", rclcpp::ParameterValue(1.0));
-  nav2_util::declare_parameter_if_not_declared(
-    node, "max_avg_distance_from_sensor", rclcpp::ParameterValue(10.0));
-  nav2_util::declare_parameter_if_not_declared(
-    node, "min_segment_width", rclcpp::ParameterValue(0.1));
-  nav2_util::declare_parameter_if_not_declared(
-    node, "max_segment_width", rclcpp::ParameterValue(10.0));
-  nav2_util::declare_parameter_if_not_declared(
-    node, "distance_threshold", rclcpp::ParameterValue(0.1));
-  nav2_util::declare_parameter_if_not_declared(
-    node, "noise_reduction", rclcpp::ParameterValue(0.1));
+  node->declare_parameter("min_points_segment", rclcpp::ParameterValue(1));
+  node->declare_parameter("max_points_segment", rclcpp::ParameterValue(3));
+  node->declare_parameter("min_avg_distance_from_sensor", rclcpp::ParameterValue(1.0));
+  node->declare_parameter("max_avg_distance_from_sensor", rclcpp::ParameterValue(10.0));
+  node->declare_parameter("min_segment_width", rclcpp::ParameterValue(0.1));
+  node->declare_parameter("max_segment_width", rclcpp::ParameterValue(10.0));
+  node->declare_parameter("distance_threshold", rclcpp::ParameterValue(0.1));
+  node->declare_parameter("noise_reduction", rclcpp::ParameterValue(0.1));
   node->configure();
 
   // Set a segment list with 0 segments

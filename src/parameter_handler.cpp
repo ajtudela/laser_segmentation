@@ -24,12 +24,10 @@
 namespace laser_segmentation
 {
 
-using nav2_util::declare_parameter_if_not_declared;
 using rcl_interfaces::msg::ParameterType;
 
 ParameterHandler::ParameterHandler(
-  rclcpp_lifecycle::LifecycleNode::SharedPtr node,
-  const rclcpp::Logger & logger)
+  rclcpp_lifecycle::LifecycleNode::SharedPtr node, const rclcpp::Logger & logger)
 {
   logger_ = logger;
 
@@ -146,13 +144,11 @@ ParameterHandler::ParameterHandler(
 
   node->get_parameter("min_points_segment", params_.min_points_segment);
   RCLCPP_INFO(
-    logger_, "The parameter min_points_segment is set to: [%d]",
-    params_.min_points_segment);
+    logger_, "The parameter min_points_segment is set to: [%d]", params_.min_points_segment);
 
   node->get_parameter("max_points_segment", params_.max_points_segment);
   RCLCPP_INFO(
-    logger_, "The parameter max_points_segment is set to: [%d]",
-    params_.max_points_segment);
+    logger_, "The parameter max_points_segment is set to: [%d]", params_.max_points_segment);
 
   node->get_parameter("min_avg_distance_from_sensor", params_.min_avg_distance_from_sensor);
   RCLCPP_INFO(
@@ -178,8 +174,7 @@ ParameterHandler::ParameterHandler(
 
   node->get_parameter("noise_reduction", params_.noise_reduction);
   RCLCPP_INFO(
-    logger_, "The parameter noise_reduction is set to: [%f]",
-    params_.noise_reduction);
+    logger_, "The parameter noise_reduction is set to: [%f]", params_.noise_reduction);
 
   node->get_parameter("method_threshold", params_.method_threshold);
   RCLCPP_INFO(
@@ -190,13 +185,11 @@ ParameterHandler::ParameterHandler(
 
   node->get_parameter("segments_topic", params_.seg_topic);
   RCLCPP_INFO(
-    logger_, "The parameter segment_topic is set to: [%s]",
-    params_.seg_topic.c_str());
+    logger_, "The parameter segment_topic is set to: [%s]", params_.seg_topic.c_str());
 
   node->get_parameter("segmentation_type", params_.segmentation_type);
   RCLCPP_INFO(
-    logger_, "The parameter segmentation_type is set to: [%s]",
-    params_.segmentation_type.c_str());
+    logger_, "The parameter segmentation_type is set to: [%s]", params_.segmentation_type.c_str());
 
   dyn_params_handler_ = node->add_on_set_parameters_callback(
     std::bind(&ParameterHandler::dynamicParametersCallback, this, std::placeholders::_1));
