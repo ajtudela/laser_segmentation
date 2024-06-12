@@ -26,6 +26,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 option(COVERAGE_ENABLED "Enable code coverage" FALSE)
+
 if(COVERAGE_ENABLED)
   add_compile_options(--coverage)
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
@@ -60,12 +61,6 @@ find_package(slg_msgs REQUIRED) # formerly simple_laser_geometry
 # ##########
 # # Build ##
 # ##########
-# # Specify additional locations of header files
-# # Your package locations should be listed before other locations
-include_directories(
-  include
-)
-
 set(source
   src/segmentation/jump_distance.cpp
   src/segmentation/jump_distance_merge.cpp
@@ -73,27 +68,35 @@ set(source
   src/laser_segmentation.cpp
 )
 
-set(dependencies
-  rclcpp
-  rclcpp_lifecycle
-  rclcpp_components
-  std_msgs
-  sensor_msgs
-  visualization_msgs
-  slg_msgs
-)
-
-set(library_name ${PROJECT_NAME}_component)
-
-# Add executables
-add_executable(${PROJECT_NAME} src/main.cpp)
-ament_target_dependencies(${PROJECT_NAME} ${dependencies})
-target_link_libraries(${PROJECT_NAME} ${library_name})
+set(library_name ${PROJECT_NAME}_core)
 
 # Library node
 add_library(${library_name} SHARED ${source})
-ament_target_dependencies(${library_name} ${dependencies})
-target_link_libraries(${library_name})
+target_include_directories(${library_name}
+  PUBLIC
+  "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
+  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
+target_link_libraries(${library_name} PUBLIC
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+  ${rclcpp_components_TARGETS}
+  ${std_msgs_TARGETS}
+  ${sensor_msgs_TARGETS}
+  ${visualization_msgs_TARGETS}
+  ${slg_msgs_TARGETS}
+)
+
+# Add executables
+add_executable(${PROJECT_NAME} src/main.cpp)
+target_include_directories(${PROJECT_NAME}
+  PUBLIC
+  "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
+  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
+target_link_libraries(${PROJECT_NAME} PUBLIC
+  rclcpp::rclcpp
+  rclcpp_lifecycle::rclcpp_lifecycle
+  ${library_name}
+)
 
 rclcpp_components_register_nodes(${library_name} "laser_segmentation::LaserSegmentation")
 
@@ -110,11 +113,8 @@ install(TARGETS ${PROJECT_NAME}
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
-install(DIRECTORY include/${PROJECT_NAME}/
+install(DIRECTORY include/
   DESTINATION include/${PROJECT_NAME}
-  FILES_MATCHING PATTERN "*.hpp"
-
-  # PATTERN ".svn" EXCLUDE
 )
 
 install(DIRECTORY launch params
@@ -136,7 +136,15 @@ endif()
 # ##################################
 # # ament specific configuration  ##
 # ##################################
-ament_export_include_directories(include)
-ament_export_libraries(${PROJECT_NAME}_component)
-ament_export_dependencies(${dependencies})
+ament_export_include_directories(include/${PROJECT_NAME})
+ament_export_libraries(${library_name})
+ament_export_dependencies(
+  rclcpp
+  rclcpp_lifecycle
+  rclcpp_components
+  std_msgs
+  sensor_msgs
+  visualization_msgs
+  slg_msgs
+)
 ament_package()
