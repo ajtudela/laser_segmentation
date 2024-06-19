@@ -15,11 +15,9 @@
 #ifndef LASER_SEGMENTATION__PARAMETER_HANDLER_HPP_
 #define LASER_SEGMENTATION__PARAMETER_HANDLER_HPP_
 
+#include <mutex>
 #include <string>
 #include <vector>
-#include <memory>
-#include <algorithm>
-#include <mutex>
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"

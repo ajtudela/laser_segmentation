@@ -53,7 +53,6 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_lifecycle REQUIRED)
 find_package(rclcpp_components REQUIRED)
-find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(slg_msgs REQUIRED) # formerly simple_laser_geometry
@@ -76,14 +75,15 @@ target_include_directories(${library_name}
   PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
-target_link_libraries(${library_name} PUBLIC
-  rclcpp::rclcpp
+target_link_libraries(${library_name}
+  PUBLIC
   rclcpp_lifecycle::rclcpp_lifecycle
   ${rclcpp_components_TARGETS}
-  ${std_msgs_TARGETS}
   ${sensor_msgs_TARGETS}
-  ${visualization_msgs_TARGETS}
   ${slg_msgs_TARGETS}
+  ${visualization_msgs_TARGETS}
+  PRIVATE
+  rclcpp::rclcpp
 )
 
 # Add executables
@@ -92,9 +92,11 @@ target_include_directories(${PROJECT_NAME}
   PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
-target_link_libraries(${PROJECT_NAME} PUBLIC
-  rclcpp::rclcpp
+target_link_libraries(${PROJECT_NAME}
+  PUBLIC
   rclcpp_lifecycle::rclcpp_lifecycle
+  PRIVATE
+  rclcpp::rclcpp
   ${library_name}
 )
 
@@ -142,7 +144,6 @@ ament_export_dependencies(
   rclcpp
   rclcpp_lifecycle
   rclcpp_components
-  std_msgs
   sensor_msgs
   visualization_msgs
   slg_msgs
