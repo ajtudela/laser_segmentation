@@ -71,8 +71,7 @@ set(library_name ${PROJECT_NAME}_core)
 
 # Library node
 add_library(${library_name} SHARED ${source})
-target_include_directories(${library_name}
-  PUBLIC
+target_include_directories(${library_name} PUBLIC
   "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
   "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
 target_link_libraries(${library_name}
