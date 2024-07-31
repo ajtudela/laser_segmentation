@@ -144,4 +144,5 @@ ament_export_dependencies(
   visualization_msgs
   slg_msgs
 )
+ament_export_targets(${library_name})
 ament_package()
