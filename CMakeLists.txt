@@ -77,27 +77,22 @@ target_include_directories(${library_name}
   "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
 target_link_libraries(${library_name}
   PUBLIC
+  rclcpp::rclcpp
   rclcpp_lifecycle::rclcpp_lifecycle
-  ${rclcpp_components_TARGETS}
   ${sensor_msgs_TARGETS}
   ${slg_msgs_TARGETS}
+  slg_msgs::slg_core
   ${visualization_msgs_TARGETS}
   PRIVATE
-  rclcpp::rclcpp
+  rclcpp_components::component
 )
 
 # Add executables
 add_executable(${PROJECT_NAME} src/main.cpp)
-target_include_directories(${PROJECT_NAME}
-  PUBLIC
-  "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
-  "$<INSTALL_INTERFACE:include/${PROJECT_NAME}>")
 target_link_libraries(${PROJECT_NAME}
-  PUBLIC
-  rclcpp_lifecycle::rclcpp_lifecycle
   PRIVATE
-  rclcpp::rclcpp
   ${library_name}
+  rclcpp::rclcpp
 )
 
 rclcpp_components_register_nodes(${library_name} "laser_segmentation::LaserSegmentation")
@@ -106,6 +101,7 @@ rclcpp_components_register_nodes(${library_name} "laser_segmentation::LaserSegme
 # # Install ##
 # ############
 install(TARGETS ${library_name}
+  EXPORT ${library_name}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin

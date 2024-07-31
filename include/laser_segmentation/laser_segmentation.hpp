@@ -129,8 +129,7 @@ protected:
    * @return slg_msgs::msg::SegmentArray The segment array message
    */
   visualization_msgs::msg::MarkerArray create_segment_viz_points(
-    std_msgs::msg::Header header,
-    std::vector<slg::Segment2D> segment_list);
+    std_msgs::msg::Header header, std::vector<slg::Segment2D> segment_list);
 
   /**
    * @brief Get the parula color object

@@ -19,8 +19,10 @@
 #include <string>
 #include <vector>
 
-#include "rclcpp/rclcpp.hpp"
+#include "rclcpp/logger.hpp"
+#include "rclcpp/parameter.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
+#include "rcl_interfaces/msg/set_parameters_result.hpp"
 
 namespace laser_segmentation
 {
