@@ -62,9 +62,6 @@ CallbackReturn LaserSegmentation::on_activate(const rclcpp_lifecycle::State & st
 {
   LifecycleNode::on_activate(state);
   RCLCPP_INFO(this->get_logger(), "Activating the node...");
-
-  segment_pub_->on_activate();
-  segment_viz_points_pub_->on_activate();
   return CallbackReturn::SUCCESS;
 }
 
@@ -72,9 +69,6 @@ CallbackReturn LaserSegmentation::on_deactivate(const rclcpp_lifecycle::State & 
 {
   LifecycleNode::on_deactivate(state);
   RCLCPP_INFO(this->get_logger(), "Deactivating the node...");
-
-  segment_pub_->on_deactivate();
-  segment_viz_points_pub_->on_deactivate();
   return CallbackReturn::SUCCESS;
 }
 
