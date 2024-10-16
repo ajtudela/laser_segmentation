@@ -101,7 +101,7 @@ rclcpp_components_register_nodes(${library_name} "laser_segmentation::LaserSegme
 # # Install ##
 # ############
 install(TARGETS ${library_name}
-  EXPORT ${library_name}
+  EXPORT ${PROJECT_NAME}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -144,5 +144,5 @@ ament_export_dependencies(
   visualization_msgs
   slg_msgs
 )
-ament_export_targets(${library_name})
+ament_export_targets(${PROJECT_NAME})
 ament_package()
