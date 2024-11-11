@@ -2,6 +2,10 @@
 Changelog for package laser_segmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.2 (31-07-2024)
+------------------
+* Update to use modern CMake idioms.
+
 3.0.1 (12-06-2024)
 ------------------
 * Remove nav2_util dependency.
