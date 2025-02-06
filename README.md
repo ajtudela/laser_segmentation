@@ -24,7 +24,7 @@ Includes a dynamic reconfigure server parameter to change online the configurati
 
 **Author: Alberto Tudela<br />**
 
-The laser_segmentation package has been tested under [ROS2] Humble on [Ubuntu] 22.04. This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
+The laser_segmentation package has been tested under [ROS2] Jazzy on [Ubuntu] 24.04. This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
 
 ## Installation
 
@@ -32,17 +32,17 @@ The laser_segmentation package has been tested under [ROS2] Humble on [Ubuntu] 2
 
 #### Dependencies
 
-- [Robot Operating System (ROS) 2](https://docs.ros.org/en/humble/) (middleware for robotics),
-- [slg_msgs](https://github.com/ajtudela/slg_msgs) (Library and messages to interact with laser related geometry - use Humble branch),
+- [Robot Operating System (ROS) 2](https://docs.ros.org/en/jazzy/) (middleware for robotics),
+- [slg_msgs](https://github.com/ajtudela/slg_msgs) (Library and messages to interact with laser related geometry - use Jazzy branch),
 
 #### Building
 
 To build from source, clone the latest version from the main repository into your colcon workspace and compile the package using
 
 	cd colcon_workspace/src
-	git clone https://github.com/ajtudela/laser_segmentation.git -b humble
+	git clone https://github.com/ajtudela/laser_segmentation.git -b jazzy
 	cd ../
-	rosdep install -i --from-path src --rosdistro humble -y
+	rosdep install -i --from-path src --rosdistro jazzy -y
 	colcon build --symlink-install
 
 ## Usage
@@ -133,8 +133,8 @@ Segmentation of the laserscans.
 	Parameter for noise reduction in "Santos" and "Dietmayer" algorithms.
 
 [Ubuntu]: https://ubuntu.com/
-[ROS2]: https://docs.ros.org/en/humble/
+[ROS2]: https://docs.ros.org/en/jazzy/
 [Rviz2]: https://github.com/ros2/rviz
-[sensor_msgs/LaserScan]: https://docs.ros2.org/humble/api/sensor_msgs/msg/LaserScan.html
+[sensor_msgs/LaserScan]: https://docs.ros2.org/jazzy/api/sensor_msgs/msg/LaserScan.html
 [slg_msgs/SegmentArray]: https://github.com/ajtudela/slg_msgs/blob/-/msg/SegmentArray.msg
-[visualization_msgs/MarkerArray]: https://docs.ros2.org/humble/api/visualization_msgs/msg/MarkerArray.html
+[visualization_msgs/MarkerArray]: https://docs.ros2.org/jazzy/api/visualization_msgs/msg/MarkerArray.html
