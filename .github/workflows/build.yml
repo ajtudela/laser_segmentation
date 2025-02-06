@@ -11,19 +11,19 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.1.6
       - name: Setup ROS 2
         uses: ros-tooling/setup-ros@0.7.5
         with:
-          required-ros-distributions: humble
+          required-ros-distributions: jazzy
       - name: Install dependencies
         uses: ros-tooling/action-ros-ci@0.3.13
         with:
           package-name: laser_segmentation
-          target-ros2-distro: humble
+          target-ros2-distro: jazzy
           vcs-repo-file-url: ./.github/repos.repos
           colcon-defaults: |
             {
