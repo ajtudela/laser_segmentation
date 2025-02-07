@@ -7,7 +7,7 @@
 
 ## Overview
 
-Implementation of differents algorithms for segmentation of laserscans, splitting them into subsets of beams, with a ROS2 interface. The currently implemented algorithm are:
+Implementation of different algorithms for segmentation of laserscans, splitting them into subsets of beams, with a ROS2 interface. The currently implemented algorithm are:
 
 * **`Jump distance clustering:`** widely used method for 2D laser range data in mobile robotics. It's a simple and fast method to segment the scans: if the Euclidean distance between two adjacent beams exceeds a given threshold distance, a new segment is generated.
 * **`Jump distance clustering and merge:`** Similar algorithm as above but checks if pre-predecessor segments are close to each other. This deals with over-segmented data with many small cluster in outdoor environment. It uses the same threshold condition twice. 
@@ -28,6 +28,15 @@ The laser_segmentation package has been tested under [ROS2] Jazzy on [Ubuntu] 24
 
 ## Installation
 
+### Binaries
+
+On Ubuntu 24.04 you can install the latest version of this package using the following command
+
+```bash
+sudo apt-get update
+sudo apt-get install ros-jazzy-laser-segmentation
+```
+
 ### Building from Source
 
 #### Dependencies
@@ -39,16 +48,21 @@ The laser_segmentation package has been tested under [ROS2] Jazzy on [Ubuntu] 24
 
 To build from source, clone the latest version from the main repository into your colcon workspace and compile the package using
 
-	cd colcon_workspace/src
-	git clone https://github.com/ajtudela/laser_segmentation.git -b jazzy
-	cd ../
-	rosdep install -i --from-path src --rosdistro jazzy -y
-	colcon build --symlink-install
+```bash
+cd colcon_workspace/src
+git clone https://github.com/ajtudela/laser_segmentation.git -b jazzy
+cd ../
+rosdep install -i --from-path src --rosdistro jazzy -y
+colcon build --symlink-install
+```
 
 ## Usage
 
 With some scan source running, run the laser_segmentation node with:
-	ros2 launch laser_segmentation segmentation.launch.py
+
+```bash
+ros2 launch laser_segmentation segmentation.launch.py
+```
 
 ## Nodes
 
