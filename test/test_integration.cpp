@@ -77,6 +77,7 @@ TEST(LaserSegmentationTest, integration) {
 
   // Spin the laser_segmentation node
   rclcpp::spin_some(seg_node->get_node_base_interface());
+  std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
   // Check the results: now, the scan should have a subscription
   // and the segment should have a publisher
