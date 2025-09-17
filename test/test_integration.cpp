@@ -33,6 +33,8 @@ TEST(LaserSegmentationTest, integration) {
 
   // Create and configure the laser_segmentation node
   auto seg_node = std::make_shared<laser_segmentation::LaserSegmentation>();
+  auto executor = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
+  executor->add_node(seg_node->get_node_base_interface());
   // Set some parameters
   seg_node->declare_parameter("min_points_segment", rclcpp::ParameterValue(1));
   seg_node->declare_parameter("max_points_segment", rclcpp::ParameterValue(3));
@@ -76,7 +78,7 @@ TEST(LaserSegmentationTest, integration) {
   scan_pub->publish(scan);
 
   // Spin the laser_segmentation node
-  rclcpp::spin_some(seg_node->get_node_base_interface());
+  executor->spin_some();
   std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
   // Check the results: now, the scan should have a subscription
