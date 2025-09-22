@@ -18,12 +18,12 @@ jobs:
       - name: Setup ROS 2
         uses: ros-tooling/setup-ros@0.7.5
         with:
-          required-ros-distributions: jazzy
+          required-ros-distributions: rolling
       - name: Install dependencies
         uses: ros-tooling/action-ros-ci@0.3.13
         with:
           package-name: laser_segmentation
-          target-ros2-distro: jazzy
+          target-ros2-distro: rolling
           vcs-repo-file-url: ./.github/repos.repos
           colcon-defaults: |
             {
