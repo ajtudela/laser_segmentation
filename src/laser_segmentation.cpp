@@ -98,6 +98,11 @@ CallbackReturn LaserSegmentation::on_shutdown(const rclcpp_lifecycle::State & st
 
 void LaserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr scan_msg)
 {
+  // Only process scans while the node is active (respect lifecycle semantics).
+  if (!segment_pub_->is_activated()) {
+    return;
+  }
+
   std::lock_guard<std::mutex> param_lock(param_handler_->getMutex());
 
   // Note: Only perform laserscan segmentation if there's any subscriber
