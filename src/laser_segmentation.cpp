@@ -47,10 +47,11 @@ CallbackReturn LaserSegmentation::on_configure(const rclcpp_lifecycle::State &)
     params_->seg_topic + "/visualization", 10);
 
   // Subscribers
-  auto default_qos = rclcpp::QoS(rclcpp::SystemDefaultsQoS());
+  // Use SensorDataQoS (BEST_EFFORT) to stay compatible with LiDAR drivers, which
+  // typically publish laser scans with BEST_EFFORT reliability.
   scan_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
     params_->scan_topic,
-    default_qos,
+    rclcpp::SensorDataQoS(),
     std::bind(&LaserSegmentation::scan_callback, this, std::placeholders::_1));
 
   RCLCPP_INFO(this->get_logger(), "Configured laser segmentation node");
