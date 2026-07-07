@@ -66,7 +66,7 @@ public:
    * @param segments The resulting list of segments.
    */
   void perform_segmentation(
-    const std::vector<slg::Point2D> points,
+    const std::vector<slg::Point2D> & points,
     std::vector<slg::Segment2D> & segments) override;
 
   typedef std::shared_ptr<JumpDistanceSegmentationMerge> SharedPtr;

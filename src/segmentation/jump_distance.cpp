@@ -29,7 +29,7 @@ void JumpDistanceSegmentation::initialize_segmentation(
 }
 
 void JumpDistanceSegmentation::perform_segmentation(
-  const std::vector<slg::Point2D> points,
+  const std::vector<slg::Point2D> & points,
   std::vector<slg::Segment2D> & segments)
 {
   int count = -1;
@@ -96,7 +96,8 @@ void JumpDistanceSegmentation::perform_segmentation(
   }
 }
 
-bool JumpDistanceSegmentation::is_jump_between(const slg::Point2D point1, const slg::Point2D point2)
+bool JumpDistanceSegmentation::is_jump_between(
+  const slg::Point2D & point1, const slg::Point2D & point2)
 {
   // Check if one or both points are NaN
   if (point1.isnan() || point2.isnan()) {
@@ -120,22 +121,22 @@ bool JumpDistanceSegmentation::is_jump_between(const slg::Point2D point1, const 
 }
 
 bool JumpDistanceSegmentation::is_jump_between(
-  const slg::Segment2D segment1,
-  const slg::Segment2D segment2)
+  const slg::Segment2D & segment1,
+  const slg::Segment2D & segment2)
 {
   return is_jump_between(segment1.last_point(), segment2.first_point());
 }
 
 double JumpDistanceSegmentation::calculate_lee_threshold(
-  const slg::Point2D point1,
-  const slg::Point2D point2)
+  const slg::Point2D & point1,
+  const slg::Point2D & point2)
 {
   return fabs((point1.length() - point2.length()) / (point1.length() + point2.length()));
 }
 
 double JumpDistanceSegmentation::calculate_diet_threshold(
-  const slg::Point2D point1,
-  const slg::Point2D point2)
+  const slg::Point2D & point1,
+  const slg::Point2D & point2)
 {
   double minRange = std::min(point1.length(), point2.length());
   double c0 = noise_reduction_;
@@ -145,8 +146,8 @@ double JumpDistanceSegmentation::calculate_diet_threshold(
 }
 
 double JumpDistanceSegmentation::calculate_santos_threshold(
-  const slg::Point2D point1,
-  const slg::Point2D point2)
+  const slg::Point2D & point1,
+  const slg::Point2D & point2)
 {
   double minRange = std::min(point1.length(), point2.length());
   double c0 = noise_reduction_;

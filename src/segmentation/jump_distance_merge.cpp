@@ -30,7 +30,7 @@ void JumpDistanceSegmentationMerge::initialize_segmentation(
 }
 
 void JumpDistanceSegmentationMerge::perform_segmentation(
-  const std::vector<slg::Point2D> points,
+  const std::vector<slg::Point2D> & points,
   std::vector<slg::Segment2D> & segments)
 {
   int count = -1;
@@ -72,24 +72,20 @@ void JumpDistanceSegmentationMerge::perform_segmentation(
       if (segments.size() > 2) {
         // Second-order comparison:
         // Check pre-pre-predecessor segment if it is close to the current point
-        slg::Segment2D prev_segment = segments[segments.size() - 3];
+        slg::Segment2D & prev_segment = segments[segments.size() - 3];
         if (!is_jump_between(prev_segment, current_segment)) {
-          // Merge both segments
+          // Merge the current segment into the predecessor in place
           prev_segment.merge(current_segment);
-          // Push back to the list
-          segments[segments.size() - 3] = prev_segment;
           // Empty the current segment
           current_segment = slg::Segment2D();
         }
       } else if (segments.size() > 1) {
         // First-order comparison:
         // Check pre-predecessor segment to see if it is close to the current point
-        slg::Segment2D prev_segment = segments[segments.size() - 2];
+        slg::Segment2D & prev_segment = segments[segments.size() - 2];
         if (!is_jump_between(prev_segment, current_segment)) {
-          // Merge both segments
+          // Merge the current segment into the predecessor in place
           prev_segment.merge(current_segment);
-          // Push back to the list
-          segments[segments.size() - 2] = prev_segment;
           // Empty the current segment
           current_segment = slg::Segment2D();
         }

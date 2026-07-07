@@ -196,8 +196,8 @@ std::vector<slg::Segment2D> LaserSegmentation::filter_segments(
 }
 
 visualization_msgs::msg::MarkerArray LaserSegmentation::create_segment_viz_points(
-  std_msgs::msg::Header header,
-  std::vector<slg::Segment2D> segment_list)
+  const std_msgs::msg::Header & header,
+  const std::vector<slg::Segment2D> & segment_list)
 {
   // Create the visualization message
   visualization_msgs::msg::MarkerArray viz_array;

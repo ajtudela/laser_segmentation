@@ -65,7 +65,7 @@ public:
  * @param segments The resulting list of segments.
  */
   void perform_segmentation(
-    const std::vector<slg::Point2D> points,
+    const std::vector<slg::Point2D> & points,
     std::vector<slg::Segment2D> & segments) override;
 
 protected:
@@ -77,7 +77,7 @@ protected:
    * @return true If the points are close to each other
    * @return false If the points are not close to each other
    */
-  bool is_jump_between(const slg::Point2D point1, const slg::Point2D point2);
+  bool is_jump_between(const slg::Point2D & point1, const slg::Point2D & point2);
 
   /**
    * @brief Checks if two adjacent segments are close to each other. The order is important.
@@ -87,7 +87,7 @@ protected:
    * @return true If the segments are close to each other
    * @return false If the segments are not close to each other
    */
-  bool is_jump_between(const slg::Segment2D segment1, const slg::Segment2D segment2);
+  bool is_jump_between(const slg::Segment2D & segment1, const slg::Segment2D & segment2);
 
   /**
    * @brief Calculate jump distance using Lee method (Lee, 2001).
@@ -96,7 +96,7 @@ protected:
    * @param point2 Second point
    * @return double The jump distance
    */
-  double calculate_lee_threshold(const slg::Point2D point1, const slg::Point2D point2);
+  double calculate_lee_threshold(const slg::Point2D & point1, const slg::Point2D & point2);
 
   /**
    * @brief Calculate jump distance using Dietmayer method (Dietmayer, et al., 2001).
@@ -105,7 +105,7 @@ protected:
    * @param point2 Second point
    * @return double The jump distance
    */
-  double calculate_diet_threshold(const slg::Point2D point1, const slg::Point2D point2);
+  double calculate_diet_threshold(const slg::Point2D & point1, const slg::Point2D & point2);
 
   /**
    * @brief Calculate jump distance using Santos method (Santos, et al., 2003).
@@ -114,7 +114,7 @@ protected:
    * @param point2 Second point
    * @return double The jump distance
    */
-  double calculate_santos_threshold(const slg::Point2D point1, const slg::Point2D point2);
+  double calculate_santos_threshold(const slg::Point2D & point1, const slg::Point2D & point2);
 
   /**
    * @brief The jump distance above which a new segment is created.

@@ -60,7 +60,7 @@ public:
    * @param segments The resulting list of segments.
    */
   virtual void perform_segmentation(
-    const std::vector<slg::Point2D> points,
+    const std::vector<slg::Point2D> & points,
     std::vector<slg::Segment2D> & segments) = 0;
 
 protected:
@@ -71,7 +71,7 @@ protected:
    * @return true If the point is valid.
    * @return false If the point is not valid.
    */
-  inline bool is_valid(const slg::Point2D point)
+  inline bool is_valid(const slg::Point2D & point)
   {
     return !point.isnan();
   }
