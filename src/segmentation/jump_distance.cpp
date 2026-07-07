@@ -73,7 +73,9 @@ void JumpDistanceSegmentation::perform_segmentation(
   }
 
   // Add the last segment to the list
-  segments.push_back(current_segment);
+  if (!current_segment.empty()) {
+    segments.push_back(current_segment);
+  }
 
   // Check if last and first segments belongs to the same segment
   if (segments.size() > 1) {
