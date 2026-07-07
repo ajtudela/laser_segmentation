@@ -13,6 +13,8 @@
 // limitations under the License.
 
 #include "laser_segmentation/laser_segmentation.hpp"
+#include "laser_segmentation/segmentation/jump_distance.hpp"
+#include "laser_segmentation/segmentation/jump_distance_merge.hpp"
 
 namespace laser_segmentation
 {
@@ -42,7 +44,7 @@ CallbackReturn LaserSegmentation::on_configure(const rclcpp_lifecycle::State &)
   }
 
   // Publishers
-  segment_pub_ = this->create_publisher<slg_msgs::msg::SegmentArray>(params_->seg_topic, 1);
+  segment_pub_ = this->create_publisher<slg_msgs::msg::SegmentArray>(params_->seg_topic, 10);
   segment_viz_points_pub_ = this->create_publisher<visualization_msgs::msg::MarkerArray>(
     params_->seg_topic + "/visualization", 10);
 

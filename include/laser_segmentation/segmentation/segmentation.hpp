@@ -38,7 +38,7 @@ public:
    * @brief Destroy the Segmentation object
    *
    */
-  virtual ~Segmentation() {}
+  virtual ~Segmentation() = default;
 
   /**
    * @brief Initialize the segmentation algorithm.

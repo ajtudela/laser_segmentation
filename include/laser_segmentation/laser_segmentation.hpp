@@ -35,8 +35,6 @@
 // LASER SEGMENTATION
 #include "laser_segmentation/parameter_handler.hpp"
 #include "laser_segmentation/segmentation/segmentation.hpp"
-#include "laser_segmentation/segmentation/jump_distance.hpp"
-#include "laser_segmentation/segmentation/jump_distance_merge.hpp"
 
 using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
