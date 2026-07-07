@@ -9,7 +9,6 @@ segmentation:
     min_points_segment: 3
     min_segment_width: 0.2
     noise_reduction: 0.3
-    restore_defaults: false
     scan_topic: scan
     segmentation_type: jump_distance_merge
     segments_topic: segments
