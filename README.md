@@ -1,5 +1,5 @@
 # laser_segmentation
-![ROS2](https://img.shields.io/badge/ros2-jazzy-blue?logo=ros&logoColor=white)
+![ROS2](https://img.shields.io/badge/ros2-rolling-blue?logo=ros&logoColor=white)
 ![License](https://img.shields.io/github/license/ajtudela/laser_segmentation)
 [![Build](https://github.com/ajtudela/laser_segmentation/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ajtudela/laser_segmentation/actions/workflows/build.yml)
 [![codecov](https://codecov.io/gh/ajtudela/laser_segmentation/graph/badge.svg?token=R48HZO62SQ)](https://codecov.io/gh/ajtudela/laser_segmentation)
@@ -24,7 +24,7 @@ Includes a dynamic reconfigure server parameter to change online the configurati
 
 **Author: Alberto Tudela<br />**
 
-The laser_segmentation package has been tested under [ROS2] Jazzy on [Ubuntu] 24.04. This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
+The laser_segmentation package has been tested under [ROS2] Rolling on [Ubuntu] 24.04. This is research code, expect that it changes often and any fitness for a particular purpose is disclaimed.
 
 ## Installation
 
@@ -34,15 +34,15 @@ On Ubuntu 24.04 you can install the latest version of this package using the fol
 
 ```bash
 sudo apt-get update
-sudo apt-get install ros-jazzy-laser-segmentation
+sudo apt-get install ros-rolling-laser-segmentation
 ```
 
 ### Building from Source
 
 #### Dependencies
 
-- [Robot Operating System (ROS) 2](https://docs.ros.org/en/jazzy/) (middleware for robotics),
-- [slg_msgs](https://github.com/ajtudela/slg_msgs) (Library and messages to interact with laser related geometry - use Jazzy branch),
+- [Robot Operating System (ROS) 2](https://docs.ros.org/en/rolling/) (middleware for robotics),
+- [slg_msgs](https://github.com/ajtudela/slg_msgs) (Library and messages to interact with laser related geometry - use Rolling branch),
 
 #### Building
 
@@ -50,9 +50,9 @@ To build from source, clone the latest version from the main repository into you
 
 ```bash
 cd colcon_workspace/src
-git clone https://github.com/ajtudela/laser_segmentation.git -b jazzy
+git clone https://github.com/ajtudela/laser_segmentation.git -b rolling
 cd ../
-rosdep install -i --from-path src --rosdistro jazzy -y
+rosdep install -i --from-path src --rosdistro rolling -y
 colcon build --symlink-install
 ```
 
@@ -88,7 +88,7 @@ Segmentation of the laserscans.
 
 	- "segments": 3d markers of the segments for showing the segments in [Rviz2].
 
-	- "segments_names": 3d markers with the id of the segments.
+	- "id": 3d markers with the id of the segments.
 
 	- "centroids": 3d markers of the segment centroids in [Rviz2].
 
@@ -98,7 +98,7 @@ Segmentation of the laserscans.
 
 	Topic of the laserscan.
 
-* **`segment_topic`** (string, default: "segments")
+* **`segments_topic`** (string, default: "segments")
 
 	Topic of the segmented laser scan.
 
@@ -147,8 +147,8 @@ Segmentation of the laserscans.
 	Parameter for noise reduction in "Santos" and "Dietmayer" algorithms.
 
 [Ubuntu]: https://ubuntu.com/
-[ROS2]: https://docs.ros.org/en/jazzy/
+[ROS2]: https://docs.ros.org/en/rolling/
 [Rviz2]: https://github.com/ros2/rviz
-[sensor_msgs/LaserScan]: https://docs.ros2.org/jazzy/api/sensor_msgs/msg/LaserScan.html
+[sensor_msgs/LaserScan]: https://docs.ros2.org/rolling/api/sensor_msgs/msg/LaserScan.html
 [slg_msgs/SegmentArray]: https://github.com/ajtudela/slg_msgs/blob/-/msg/SegmentArray.msg
-[visualization_msgs/MarkerArray]: https://docs.ros2.org/jazzy/api/visualization_msgs/msg/MarkerArray.html
+[visualization_msgs/MarkerArray]: https://docs.ros2.org/rolling/api/visualization_msgs/msg/MarkerArray.html

@@ -36,7 +36,7 @@ CallbackReturn LaserSegmentation::on_configure(const rclcpp_lifecycle::State &)
     segmentation_.reset(new JumpDistanceSegmentationMerge);
   } else {
     RCLCPP_FATAL(
-      this->get_logger(), "Segmentation algorithm is invalid: %s]",
+      this->get_logger(), "Segmentation algorithm is invalid: %s",
       params_->segmentation_type.c_str());
     return CallbackReturn::FAILURE;
   }

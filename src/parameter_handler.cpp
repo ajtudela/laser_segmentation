@@ -60,7 +60,7 @@ ParameterHandler::ParameterHandler(
     .set__floating_point_range(
       {rcl_interfaces::msg::FloatingPointRange()
         .set__from_value(0.0)
-        .set__to_value(1.0)
+        .set__to_value(50.0)
         .set__step(0.01)}
   ));
 
@@ -130,7 +130,7 @@ ParameterHandler::ParameterHandler(
   declare_parameter_if_not_declared(
     node, "scan_topic", rclcpp::ParameterValue("scan"),
     rcl_interfaces::msg::ParameterDescriptor()
-    .set__description("Laser topic to read]"));
+    .set__description("Laser topic to read"));
 
   declare_parameter_if_not_declared(
     node, "segments_topic", rclcpp::ParameterValue("segments"),
