@@ -27,7 +27,7 @@ CallbackReturn LaserSegmentation::on_configure(const rclcpp_lifecycle::State &)
   // Handles storage and dynamic configuration of parameters.
   // Returns pointer to data current param settings.
   param_handler_ = std::make_unique<ParameterHandler>(shared_from_this(), this->get_logger());
-  params_ = param_handler_->getParams();
+  params_ = param_handler_->get_params();
 
   // Setting for segmentation algorithm
   if (params_->segmentation_type == "jump_distance") {
@@ -103,7 +103,7 @@ void LaserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
     return;
   }
 
-  std::lock_guard<std::mutex> param_lock(param_handler_->getMutex());
+  std::lock_guard<std::mutex> param_lock(param_handler_->get_mutex());
 
   // Note: Only perform laserscan segmentation if there's any subscriber
   if (segment_pub_->get_subscription_count() == 0 &&

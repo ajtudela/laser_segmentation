@@ -192,11 +192,11 @@ ParameterHandler::ParameterHandler(
     logger_, "The parameter segmentation_type is set to: [%s]", params_.segmentation_type.c_str());
 
   dyn_params_handler_ = node->add_on_set_parameters_callback(
-    std::bind(&ParameterHandler::dynamicParametersCallback, this, std::placeholders::_1));
+    std::bind(&ParameterHandler::dynamic_parameters_callback, this, std::placeholders::_1));
 }
 
 rcl_interfaces::msg::SetParametersResult
-ParameterHandler::dynamicParametersCallback(std::vector<rclcpp::Parameter> parameters)
+ParameterHandler::dynamic_parameters_callback(std::vector<rclcpp::Parameter> parameters)
 {
   rcl_interfaces::msg::SetParametersResult result;
   result.successful = true;

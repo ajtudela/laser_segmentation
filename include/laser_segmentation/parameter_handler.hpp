@@ -61,9 +61,9 @@ public:
    */
   ~ParameterHandler() = default;
 
-  std::mutex & getMutex() {return mutex_;}
+  std::mutex & get_mutex() {return mutex_;}
 
-  Parameters * getParams() {return &params_;}
+  Parameters * get_params() {return &params_;}
 
 protected:
   /**
@@ -71,7 +71,7 @@ protected:
    * @param event ParameterEvent message
    */
   rcl_interfaces::msg::SetParametersResult
-  dynamicParametersCallback(std::vector<rclcpp::Parameter> parameters);
+  dynamic_parameters_callback(std::vector<rclcpp::Parameter> parameters);
 
 /**
  * @brief Declares static ROS2 parameter and sets it to a given value if it was not already declared.
