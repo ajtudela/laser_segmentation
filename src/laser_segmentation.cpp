@@ -276,17 +276,6 @@ visualization_msgs::msg::MarkerArray LaserSegmentation::create_segment_viz_point
   return viz_array;
 }
 
-std_msgs::msg::ColorRGBA LaserSegmentation::get_parula_color(unsigned int index, unsigned int max)
-{
-  std_msgs::msg::ColorRGBA color;
-  int div = round(256 / max);
-  color.r = parula[index * div][0];
-  color.g = parula[index * div][1];
-  color.b = parula[index * div][2];
-  color.a = 1.0;
-  return color;
-}
-
 std_msgs::msg::ColorRGBA LaserSegmentation::get_palette_color(unsigned int index)
 {
   std_msgs::msg::ColorRGBA color;

@@ -38,11 +38,6 @@ public:
     return LaserSegmentation::create_segment_viz_points(header, segment_list);
   }
 
-  std_msgs::msg::ColorRGBA get_parula_color(unsigned int index, unsigned int max)
-  {
-    return LaserSegmentation::get_parula_color(index, max);
-  }
-
   std_msgs::msg::ColorRGBA get_palette_color(unsigned int index)
   {
     return LaserSegmentation::get_palette_color(index);
@@ -116,15 +111,6 @@ TEST(LaserSegmentationTest, dynamicParameters) {
   EXPECT_EQ(node->get_parameter("distance_threshold").as_double(), 0.1);
   EXPECT_EQ(node->get_parameter("noise_reduction").as_double(), 0.1);
   EXPECT_EQ(node->get_parameter("method_threshold").as_string(), "fixed_test");
-}
-
-TEST(LaserSegmentationTest, colorParula) {
-  laserSegmentationFixture node;
-  std_msgs::msg::ColorRGBA color = node.get_parula_color(0, 10);
-  EXPECT_DOUBLE_EQ(color.r, 0.20810000598430634);
-  EXPECT_DOUBLE_EQ(color.g, 0.16629999876022339);
-  EXPECT_DOUBLE_EQ(color.b, 0.52920001745223999);
-  EXPECT_DOUBLE_EQ(color.a, 1.0);
 }
 
 using LaserSegmentationColorParam = std::tuple<unsigned int, std::tuple<double, double, double,

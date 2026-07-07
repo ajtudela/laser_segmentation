@@ -33,7 +33,6 @@
 #include "slg_msgs/msg/segment_array.hpp"
 
 // LASER SEGMENTATION
-#include "laser_segmentation/parula.hpp"
 #include "laser_segmentation/parameter_handler.hpp"
 #include "laser_segmentation/segmentation/segmentation.hpp"
 #include "laser_segmentation/segmentation/jump_distance.hpp"
@@ -130,15 +129,6 @@ protected:
    */
   visualization_msgs::msg::MarkerArray create_segment_viz_points(
     const std_msgs::msg::Header & header, const std::vector<slg::Segment2D> & segment_list);
-
-  /**
-   * @brief Get the parula color object
-   *
-   * @param index Index of the color
-   * @param max Maximum index
-   * @return std_msgs::msg::ColorRGBA The color
-   */
-  std_msgs::msg::ColorRGBA get_parula_color(unsigned int index, unsigned int max);
 
   /**
    * @brief Get the palette color object
