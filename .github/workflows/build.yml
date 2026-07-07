@@ -13,14 +13,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    container:
+      image: ros:rolling
     steps:
+      - name: Install global dependencies
+        run: |
+          apt update && apt install --no-install-recommends -y \
+            python3-pip python3-colcon-coveragepy-result
       - name: Checkout Repository
-        uses: actions/checkout@v6
-      - name: Setup ROS 2
-        uses: ros-tooling/setup-ros@v0.7
-        with:
-          required-ros-distributions: rolling
-      - name: Install dependencies
+        uses: actions/checkout@v7
+      - name: Build and Test
         uses: ros-tooling/action-ros-ci@v0.4
         with:
           package-name: laser_segmentation
@@ -37,7 +39,7 @@ jobs:
             }
           skip-tests: false
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ros_ws/lcov/total_coverage.info,ros_ws/coveragepy/.coverage
@@ -46,7 +48,8 @@ jobs:
           slug: ajtudela/laser_segmentation
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           flags: unittests
+          report_type: test_results
