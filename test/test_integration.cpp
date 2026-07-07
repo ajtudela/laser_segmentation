@@ -74,12 +74,17 @@ TEST(LaserSegmentationTest, integration) {
     });
   auto sub_thread = std::thread([&]() {rclcpp::spin(sub_node->get_node_base_interface());});
 
-  // Publish the message
-  scan_pub->publish(scan);
-
-  // Spin the laser_segmentation node
-  executor->spin_some();
-  std::this_thread::sleep_for(std::chrono::milliseconds(5));
+  // Publish the message repeatedly and spin the laser_segmentation node until the
+  // segments are received or a timeout is reached. Publishing in a loop avoids races
+  // where the scan is sent before pub/sub discovery has completed.
+  auto start_time = std::chrono::steady_clock::now();
+  while (!msg_received &&
+    (std::chrono::steady_clock::now() - start_time) < std::chrono::seconds(10))
+  {
+    scan_pub->publish(scan);
+    executor->spin_some();
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  }
 
   // Check the results: now, the scan should have a subscription
   // and the segment should have a publisher
