@@ -205,7 +205,7 @@ visualization_msgs::msg::MarkerArray LaserSegmentation::create_segment_viz_point
   // Create a marker point
   visualization_msgs::msg::Marker viz_points;
   viz_points.header = header;
-  viz_points.lifetime = rclcpp::Duration(0, 10);
+  viz_points.lifetime = rclcpp::Duration(0, 0);
   viz_points.ns = "segments";
   viz_points.type = visualization_msgs::msg::Marker::POINTS;
   viz_points.action = visualization_msgs::msg::Marker::ADD;
@@ -214,7 +214,7 @@ visualization_msgs::msg::MarkerArray LaserSegmentation::create_segment_viz_point
   // Create a marker centroid
   visualization_msgs::msg::Marker viz_centroids;
   viz_centroids.header = header;
-  viz_centroids.lifetime = rclcpp::Duration(0, 10);
+  viz_centroids.lifetime = rclcpp::Duration(0, 0);
   viz_centroids.ns = "centroids";
   viz_centroids.type = visualization_msgs::msg::Marker::CUBE;
   viz_centroids.action = visualization_msgs::msg::Marker::ADD;
@@ -223,7 +223,7 @@ visualization_msgs::msg::MarkerArray LaserSegmentation::create_segment_viz_point
   // Create a marker id text
   visualization_msgs::msg::Marker viz_text;
   viz_text.header = header;
-  viz_text.lifetime = rclcpp::Duration(0, 10);
+  viz_text.lifetime = rclcpp::Duration(0, 0);
   viz_text.ns = "id";
   viz_text.type = visualization_msgs::msg::Marker::TEXT_VIEW_FACING;
   viz_text.action = visualization_msgs::msg::Marker::ADD;
