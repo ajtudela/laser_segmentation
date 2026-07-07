@@ -234,7 +234,7 @@ ParameterHandler::dynamic_parameters_callback(std::vector<rclcpp::Parameter> par
     } else if (type == ParameterType::PARAMETER_STRING) {
       if (name == "method_threshold") {
         candidate.method_threshold = parameter.as_string();
-      } else if (name == "segmentation_type" || name == "scan_topic" || name == "segments_topic"){
+      } else if (name == "segmentation_type" || name == "scan_topic" || name == "segments_topic") {
         // These parameters are only read on configure; reject runtime changes
         // instead of silently accepting a change that will not take effect.
         result.successful = false;
