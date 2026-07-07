@@ -199,67 +199,77 @@ rcl_interfaces::msg::SetParametersResult
 ParameterHandler::dynamicParametersCallback(std::vector<rclcpp::Parameter> parameters)
 {
   rcl_interfaces::msg::SetParametersResult result;
+  result.successful = true;
   std::lock_guard<std::mutex> lock_reinit(mutex_);
 
-  for (auto parameter : parameters) {
+  // Work on a candidate copy so that the min/max pairs can be validated against
+  // the parameters that are not part of this update, and nothing is applied
+  // unless the whole batch is valid.
+  Parameters candidate = params_;
+
+  for (const auto & parameter : parameters) {
     const auto & type = parameter.get_type();
     const auto & name = parameter.get_name();
 
     if (type == rclcpp::ParameterType::PARAMETER_INTEGER) {
       if (name == "min_points_segment") {
-        params_.min_points_segment = parameter.as_int();
-        RCLCPP_INFO(
-          logger_, "The parameter min_points_segment is set to: [%d]",
-          params_.min_points_segment);
+        candidate.min_points_segment = parameter.as_int();
       } else if (name == "max_points_segment") {
-        params_.max_points_segment = parameter.as_int();
-        RCLCPP_INFO(
-          logger_, "The parameter max_points_segment is set to: [%d]",
-          params_.max_points_segment);
+        candidate.max_points_segment = parameter.as_int();
       }
     } else if (type == ParameterType::PARAMETER_DOUBLE) {
       if (name == "min_avg_distance_from_sensor") {
-        params_.min_avg_distance_from_sensor = parameter.as_double();
-        RCLCPP_INFO(
-          logger_, "The parameter min_avg_distance_from_sensor is set to: [%3.3f]",
-          params_.min_avg_distance_from_sensor);
+        candidate.min_avg_distance_from_sensor = parameter.as_double();
       } else if (name == "max_avg_distance_from_sensor") {
-        params_.max_avg_distance_from_sensor = parameter.as_double();
-        RCLCPP_INFO(
-          logger_, "The parameter max_avg_distance_from_sensor is set to: [%3.3f]",
-          params_.max_avg_distance_from_sensor);
+        candidate.max_avg_distance_from_sensor = parameter.as_double();
       } else if (name == "min_segment_width") {
-        params_.min_segment_width = parameter.as_double();
-        RCLCPP_INFO(
-          logger_, "The parameter min_segment_width is set to: [%3.3f]",
-          params_.min_segment_width);
+        candidate.min_segment_width = parameter.as_double();
       } else if (name == "max_segment_width") {
-        params_.max_segment_width = parameter.as_double();
-        RCLCPP_INFO(
-          logger_, "The parameter max_segment_width is set to: [%3.3f]",
-          params_.max_segment_width);
+        candidate.max_segment_width = parameter.as_double();
       } else if (name == "distance_threshold") {
-        params_.distance_threshold = parameter.as_double();
-        RCLCPP_INFO(
-          logger_, "The parameter distance_threshold is set to: [%3.3f]",
-          params_.distance_threshold);
+        candidate.distance_threshold = parameter.as_double();
       } else if (name == "noise_reduction") {
-        params_.noise_reduction = parameter.as_double();
-        RCLCPP_INFO(
-          logger_, "The parameter noise_reduction is set to: [%3.3f]",
-          params_.noise_reduction);
+        candidate.noise_reduction = parameter.as_double();
       }
     } else if (type == ParameterType::PARAMETER_STRING) {
       if (name == "method_threshold") {
-        params_.method_threshold = parameter.as_string();
-        RCLCPP_INFO(
-          logger_, "The parameter method_threshold is set to: [%s]",
-          params_.method_threshold.c_str());
+        candidate.method_threshold = parameter.as_string();
+      } else if (name == "segmentation_type" || name == "scan_topic" ||
+        name == "segments_topic")
+      {
+        // These parameters are only read on configure; reject runtime changes
+        // instead of silently accepting a change that will not take effect.
+        result.successful = false;
+        result.reason = "The parameter '" + name +
+          "' can only be set before the node is configured.";
+        RCLCPP_WARN(logger_, "%s", result.reason.c_str());
+        return result;
       }
     }
   }
 
-  result.successful = true;
+  // Validate the coherence of the min/max pairs.
+  if (candidate.min_points_segment > candidate.max_points_segment) {
+    result.successful = false;
+    result.reason = "'min_points_segment' cannot be greater than 'max_points_segment'.";
+  } else if (candidate.min_avg_distance_from_sensor > candidate.max_avg_distance_from_sensor) {
+    result.successful = false;
+    result.reason =
+      "'min_avg_distance_from_sensor' cannot be greater than 'max_avg_distance_from_sensor'.";
+  } else if (candidate.min_segment_width > candidate.max_segment_width) {
+    result.successful = false;
+    result.reason = "'min_segment_width' cannot be greater than 'max_segment_width'.";
+  }
+
+  if (!result.successful) {
+    RCLCPP_WARN(logger_, "%s", result.reason.c_str());
+    return result;
+  }
+
+  // All checks passed: commit the new configuration.
+  params_ = candidate;
+  RCLCPP_INFO(logger_, "Updated laser_segmentation parameters.");
+
   return result;
 }
 
