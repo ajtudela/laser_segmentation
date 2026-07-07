@@ -2,6 +2,21 @@
 Changelog for package laser_segmentation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+3.0.4 (07-07-2026)
+------------------
+* Fix marker lifetime being set to 10 ns; markers are now persistent.
+* Subscribe to the scan topic with SensorDataQoS for LiDAR compatibility.
+* Skip segmentation while the node is inactive.
+* Pass points, segments and headers by const reference.
+* Do not emit an empty final segment in jump_distance.
+* Remove dead get_parula_color and parula.hpp.
+* Remove undeclared restore_defaults from default_params.yml.
+* Validate dynamic parameters and reject unsupported ones.
+* Use snake_case for ParameterHandler methods.
+* Sync README with the code and fix parameter descriptors.
+* Minor C++ and build cleanups.
+* Fix flaky integration test and add tests for segmentation edge cases and dynamic parameter validation.
+
 3.0.3 (06-02-2025)
 ------------------
 * First jazzy release.
