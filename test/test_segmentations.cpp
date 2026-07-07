@@ -343,6 +343,54 @@ TEST(JumpDistanceMergeTest, performSegmentation) {
   EXPECT_EQ(segments[4].size(), 1);
 }
 
+TEST(JumpDistanceTest, performSegmentationEdgeCases) {
+  JDistanceFixture segmentation;
+  segmentation.initialize_segmentation(0.1, 0.2, 0.3, "test");
+
+  // An empty scan should not produce any segment
+  std::vector<slg::Point2D> points;
+  std::vector<slg::Segment2D> segments;
+  segmentation.perform_segmentation(points, segments);
+  EXPECT_EQ(segments.size(), 0);
+
+  // A scan with only invalid (NaN) points should not produce any segment
+  points = {slg::Point2D::quiet_NaN(), slg::Point2D::quiet_NaN()};
+  segments.clear();
+  segmentation.perform_segmentation(points, segments);
+  EXPECT_EQ(segments.size(), 0);
+
+  // A single valid point should produce one segment with one point
+  points = {slg::Point2D(1.0, 1.0, slg::BACKGROUND)};
+  segments.clear();
+  segmentation.perform_segmentation(points, segments);
+  ASSERT_EQ(segments.size(), 1);
+  EXPECT_EQ(segments[0].size(), 1);
+}
+
+TEST(JumpDistanceMergeTest, performSegmentationEdgeCases) {
+  JDistanceMergeFixture segmentation;
+  segmentation.initialize_segmentation(0.1, 0.2, 0.3, "test");
+
+  // An empty scan should not produce any segment
+  std::vector<slg::Point2D> points;
+  std::vector<slg::Segment2D> segments;
+  segmentation.perform_segmentation(points, segments);
+  EXPECT_EQ(segments.size(), 0);
+
+  // A scan with only invalid (NaN) points should not produce any segment
+  points = {slg::Point2D::quiet_NaN(), slg::Point2D::quiet_NaN()};
+  segments.clear();
+  segmentation.perform_segmentation(points, segments);
+  EXPECT_EQ(segments.size(), 0);
+
+  // A single valid point should produce one segment with one point
+  points = {slg::Point2D(1.0, 1.0, slg::BACKGROUND)};
+  segments.clear();
+  segmentation.perform_segmentation(points, segments);
+  ASSERT_EQ(segments.size(), 1);
+  EXPECT_EQ(segments[0].size(), 1);
+}
+
 
 int main(int argc, char ** argv)
 {

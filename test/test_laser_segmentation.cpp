@@ -113,6 +113,44 @@ TEST(LaserSegmentationTest, dynamicParameters) {
   EXPECT_EQ(node->get_parameter("method_threshold").as_string(), "fixed_test");
 }
 
+TEST(LaserSegmentationTest, dynamicParametersValidation) {
+  // Create and configure the node
+  auto node = std::make_shared<laserSegmentationFixture>();
+  node->configure();
+  node->activate();
+
+  auto params = std::make_shared<rclcpp::AsyncParametersClient>(
+    node->get_node_base_interface(), node->get_node_topics_interface(),
+    node->get_node_graph_interface(),
+    node->get_node_services_interface());
+
+  // An incoherent min/max pair must be rejected
+  auto results = params->set_parameters_atomically(
+  {
+    rclcpp::Parameter("min_points_segment", 10),
+    rclcpp::Parameter("max_points_segment", 5)
+  });
+  rclcpp::spin_until_future_complete(node->get_node_base_interface(), results);
+  EXPECT_FALSE(results.get().successful);
+
+  // A configure-only parameter must be rejected while the node is configured
+  auto results_type = params->set_parameters_atomically(
+  {
+    rclcpp::Parameter("segmentation_type", "jump_distance_merge")
+  });
+  rclcpp::spin_until_future_complete(node->get_node_base_interface(), results_type);
+  EXPECT_FALSE(results_type.get().successful);
+
+  // A coherent update must succeed
+  auto results_ok = params->set_parameters_atomically(
+  {
+    rclcpp::Parameter("min_points_segment", 2),
+    rclcpp::Parameter("max_points_segment", 20)
+  });
+  rclcpp::spin_until_future_complete(node->get_node_base_interface(), results_ok);
+  EXPECT_TRUE(results_ok.get().successful);
+}
+
 using LaserSegmentationColorParam = std::tuple<unsigned int, std::tuple<double, double, double,
     double>>;
 
