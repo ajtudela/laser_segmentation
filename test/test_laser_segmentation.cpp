@@ -29,7 +29,7 @@ public:
 
   std::vector<slg::Segment2D> filter_segments(const std::vector<slg::Segment2D> & segments)
   {
-    return LaserSegmentation::filter_segments(segments);
+    return LaserSegmentation::filter_segments(segments, *params_);
   }
 
   visualization_msgs::msg::MarkerArray create_segment_viz_points(

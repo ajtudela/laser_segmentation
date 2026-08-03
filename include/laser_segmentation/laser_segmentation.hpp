@@ -114,9 +114,11 @@ protected:
    * @brief Filter the segments using the parameters
    *
    * @param segments List of segments
+   * @param params Parameters snapshot to filter against
    * @return std::vector<slg::Segment2D> Filtered segments
    */
-  std::vector<slg::Segment2D> filter_segments(const std::vector<slg::Segment2D> & segments);
+  std::vector<slg::Segment2D> filter_segments(
+    const std::vector<slg::Segment2D> & segments, const Parameters & params);
 
   /**
    * @brief Create the segment array message

@@ -105,16 +105,25 @@ void LaserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
     return;
   }
 
-  std::lock_guard<std::mutex> param_lock(param_handler_->get_mutex());
-
   // Note: Only perform laserscan segmentation if there's any subscriber
   if (segment_pub_->get_subscription_count() == 0 &&
     segment_viz_points_pub_->get_subscription_count() == 0)
   {
     return;
   }
+
+  // Take a snapshot of the parameters under lock and release it immediately, so the
+  // mutex is not held while segmentation and publishing (which involves middleware I/O)
+  // take place. The mutex only protects the Parameters struct, not the processing below.
+  Parameters params_snapshot;
+  {
+    std::lock_guard<std::mutex> param_lock(param_handler_->get_mutex());
+    params_snapshot = *params_;
+  }
+
   RCLCPP_INFO_ONCE(
-    this->get_logger(), "Subscribed to laser scan topic: [%s]", params_->scan_topic.c_str());
+    this->get_logger(), "Subscribed to laser scan topic: [%s]",
+    params_snapshot.scan_topic.c_str());
 
   // Read the laser scan
   std::vector<slg::Point2D> point_list;
@@ -132,12 +141,12 @@ void LaserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
   // Segment the points
   std::vector<slg::Segment2D> segment_list;
   segmentation_->initialize_segmentation(
-    params_->distance_threshold, angle_resolution, params_->noise_reduction,
-    params_->method_threshold);
+    params_snapshot.distance_threshold, angle_resolution, params_snapshot.noise_reduction,
+    params_snapshot.method_threshold);
   segmentation_->perform_segmentation(point_list, segment_list);
 
   // Filter segments
-  auto segment_filtered_list = filter_segments(segment_list);
+  auto segment_filtered_list = filter_segments(segment_list, params_snapshot);
 
   // Identification of segments and set angular distance
   for (std::vector<slg::Segment2D>::size_type s = 0; s < segment_filtered_list.size(); s++) {
@@ -162,25 +171,25 @@ void LaserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
 }
 
 std::vector<slg::Segment2D> LaserSegmentation::filter_segments(
-  const std::vector<slg::Segment2D> & segments)
+  const std::vector<slg::Segment2D> & segments, const Parameters & params)
 {
   std::vector<slg::Segment2D> filtered_segments;
   filtered_segments.reserve(segments.size());
 
-  double squared_min_segment_width = params_->min_segment_width * params_->min_segment_width;
-  double squared_max_segment_width = params_->max_segment_width * params_->max_segment_width;
+  double squared_min_segment_width = params.min_segment_width * params.min_segment_width;
+  double squared_max_segment_width = params.max_segment_width * params.max_segment_width;
 
   for (const auto & segment : segments) {
     // By number of points
-    if (segment.size() < params_->min_points_segment ||
-      segment.size() > params_->max_points_segment)
+    if (segment.size() < params.min_points_segment ||
+      segment.size() > params.max_points_segment)
     {
       continue;
     }
 
     // By distance to sensor
-    if (segment.centroid().length() < params_->min_avg_distance_from_sensor ||
-      segment.centroid().length() > params_->max_avg_distance_from_sensor)
+    if (segment.centroid().length() < params.min_avg_distance_from_sensor ||
+      segment.centroid().length() > params.max_avg_distance_from_sensor)
     {
       continue;
     }
