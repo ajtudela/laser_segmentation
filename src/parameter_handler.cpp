@@ -179,6 +179,7 @@ ParameterHandler::ParameterHandler(
   node->get_parameter("method_threshold", params_.method_threshold);
   RCLCPP_INFO(
     logger_, "The parameter method_threshold is set to: [%s]", params_.method_threshold.c_str());
+  warn_if_unknown_threshold_method(params_.method_threshold);
 
   node->get_parameter("scan_topic", params_.scan_topic);
   RCLCPP_INFO(logger_, "The parameter scan_topic is set to: [%s]", params_.scan_topic.c_str());
@@ -234,6 +235,7 @@ ParameterHandler::dynamic_parameters_callback(std::vector<rclcpp::Parameter> par
     } else if (type == ParameterType::PARAMETER_STRING) {
       if (name == "method_threshold") {
         candidate.method_threshold = parameter.as_string();
+        warn_if_unknown_threshold_method(candidate.method_threshold);
       } else if (name == "segmentation_type" || name == "scan_topic" || name == "segments_topic") {
         // These parameters are only read on configure; reject runtime changes
         // instead of silently accepting a change that will not take effect.
@@ -269,6 +271,21 @@ ParameterHandler::dynamic_parameters_callback(std::vector<rclcpp::Parameter> par
   RCLCPP_INFO(logger_, "Updated laser_segmentation parameters.");
 
   return result;
+}
+
+void ParameterHandler::warn_if_unknown_threshold_method(const std::string & method)
+{
+  if (method.empty()) {
+    // Empty means "use the fixed distance_threshold", which is a valid choice.
+    return;
+  }
+  if (method != "lee" && method != "diet" && method != "santos") {
+    RCLCPP_WARN(
+      logger_,
+      "Unknown method_threshold '%s': falling back to the fixed distance_threshold. "
+      "Valid values are 'lee', 'diet', 'santos' or an empty string.",
+      method.c_str());
+  }
 }
 
 }  // namespace laser_segmentation

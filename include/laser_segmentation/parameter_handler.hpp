@@ -73,6 +73,15 @@ protected:
   rcl_interfaces::msg::SetParametersResult
   dynamic_parameters_callback(std::vector<rclcpp::Parameter> parameters);
 
+  /**
+   * @brief Warn if the given threshold method is neither empty (fixed threshold)
+   * nor one of the known methods ("lee", "diet", "santos"), since an unknown
+   * value silently falls back to the fixed threshold in the segmentation algorithm.
+   *
+   * @param method The value of the 'method_threshold' parameter to check.
+   */
+  void warn_if_unknown_threshold_method(const std::string & method);
+
 /**
  * @brief Declares static ROS2 parameter and sets it to a given value if it was not already declared.
  *
