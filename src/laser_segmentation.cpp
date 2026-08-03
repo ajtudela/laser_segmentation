@@ -127,6 +127,7 @@ void LaserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
 
   // Read the laser scan
   std::vector<slg::Point2D> point_list;
+  point_list.reserve(scan_msg->ranges.size());
   double phi = scan_msg->angle_min;
   double angle_resolution = scan_msg->angle_increment;
   for (const auto r : scan_msg->ranges) {
@@ -161,6 +162,7 @@ void LaserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
   if (segment_pub_->get_subscription_count() > 0) {
     slg_msgs::msg::SegmentArray segment_array_msg;
     segment_array_msg.header = scan_msg->header;
+    segment_array_msg.segments.reserve(segment_filtered_list.size());
     for (const auto & segment : segment_filtered_list) {
       segment_array_msg.segments.push_back(segment);
     }

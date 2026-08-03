@@ -20,7 +20,7 @@ namespace laser_segmentation
 void JumpDistanceSegmentation::initialize_segmentation(
   double jump_distance,
   double angle_resolution,
-  double noise_reduction, std::string method)
+  double noise_reduction, const std::string & method)
 {
   jump_distance_ = jump_distance;
   angle_resolution_ = angle_resolution;

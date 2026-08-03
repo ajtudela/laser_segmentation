@@ -56,7 +56,7 @@ public:
    */
   void initialize_segmentation(
     double distance, double angle_resolution,
-    double noise_reduction, std::string method = "") override;
+    double noise_reduction, const std::string & method = "") override;
 
   /**
    * @brief Perform the segmentation of the given list of points

@@ -51,7 +51,7 @@ public:
    */
   virtual void initialize_segmentation(
     double distance, double angle_resolution,
-    double noise_reduction, std::string method = "") = 0;
+    double noise_reduction, const std::string & method = "") = 0;
 
   /**
    * @brief Perform the segmentation of the given list of points.
