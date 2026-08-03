@@ -26,6 +26,11 @@ void JumpDistanceSegmentation::initialize_segmentation(
   angle_resolution_ = angle_resolution;
   noise_reduction_ = noise_reduction;
   threshold_method_ = method;
+
+  // Precompute the angle_resolution_-dependent trigonometric constants once per
+  // scan, instead of recalculating them for every pair of points being compared.
+  c1_ = sqrt(2.0 * (1.0 - cos(angle_resolution_)));
+  santos_denom_ = cos(angle_resolution_ / 2) - sin(angle_resolution_ / 2);
 }
 
 void JumpDistanceSegmentation::perform_segmentation(
@@ -150,10 +155,8 @@ double JumpDistanceSegmentation::calculate_diet_threshold(
   const slg::Point2D & point2)
 {
   double minRange = std::min(point1.length(), point2.length());
-  double c0 = noise_reduction_;
-  double c1 = sqrt(2.0 * (1.0 - cos(angle_resolution_)) );
 
-  return c0 + c1 * minRange;
+  return noise_reduction_ + c1_ * minRange;
 }
 
 double JumpDistanceSegmentation::calculate_santos_threshold(
@@ -161,12 +164,9 @@ double JumpDistanceSegmentation::calculate_santos_threshold(
   const slg::Point2D & point2)
 {
   double minRange = std::min(point1.length(), point2.length());
-  double c0 = noise_reduction_;
-  double c1 = sqrt(2.0 * (1.0 - cos(angle_resolution_)) );
-
   double beta = atan2(fabs(point1.y - point2.y), fabs(point1.x - point2.x));
-  return c0 + (c1 * minRange * tan(beta)) /
-         (cos(angle_resolution_ / 2) - sin(angle_resolution_ / 2));
+
+  return noise_reduction_ + (c1_ * minRange * tan(beta)) / santos_denom_;
 }
 
 }  // namespace laser_segmentation

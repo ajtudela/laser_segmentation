@@ -152,6 +152,22 @@ protected:
    *
    */
   std::string threshold_method_;
+
+  /**
+   * @brief Precomputed `sqrt(2 * (1 - cos(angle_resolution_)))`, used by the
+   * Dietmayer and Santos dynamic threshold methods. Recomputed only once in
+   * initialize_segmentation(), since angle_resolution_ is constant for the
+   * whole scan.
+   *
+   */
+  double c1_;
+
+  /**
+   * @brief Precomputed `cos(angle_resolution_ / 2) - sin(angle_resolution_ / 2)`,
+   * used by the Santos dynamic threshold method.
+   *
+   */
+  double santos_denom_;
 };
 
 }  // namespace laser_segmentation
