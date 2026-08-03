@@ -16,8 +16,6 @@
 #define LASER_SEGMENTATION__SEGMENTATION__JUMP_DISTANCE_MERGE_HPP_
 
 // C++
-#include <memory>
-#include <string>
 #include <vector>
 
 #include "laser_segmentation/segmentation/jump_distance.hpp"
@@ -45,31 +43,19 @@ public:
    */
   ~JumpDistanceSegmentationMerge() override = default;
 
+protected:
   /**
-   * @brief Initialize the segmentation algorithm.
+   * @brief Merge the newly created segment into an earlier predecessor when it is
+   * close enough, instead of always starting a fresh segment after a jump. Checks
+   * the pre-pre-predecessor first (second-order comparison), falling back to the
+   * pre-predecessor (first-order comparison).
    *
-   * @param distance The maximum distance between two consecutive points
-   * to be considered part of the same segment.
-   * @param angle_resolution The minimum angle between two consecutive points.
-   * @param noise_reduction Parameter for noise reduction (if applicable).
-   * @param method The method to be used for segmentation.
+   * @param segments The segments collected so far (not including current_segment).
+   * @param current_segment The segment that was just created; cleared if merged.
    */
-  void initialize_segmentation(
-    double distance, double angle_resolution,
-    double noise_reduction, const std::string & method = "") override;
-
-  /**
-   * @brief Perform the segmentation of the given list of points
-   * into a list of segments using Jump Distance Clustering.
-   *
-   * @param points The list of points to be segmented.
-   * @param segments The resulting list of segments.
-   */
-  void perform_segmentation(
-    const std::vector<slg::Point2D> & points,
-    std::vector<slg::Segment2D> & segments) override;
-
-  typedef std::shared_ptr<JumpDistanceSegmentationMerge> SharedPtr;
+  void on_segment_created(
+    std::vector<slg::Segment2D> & segments,
+    slg::Segment2D & current_segment) override;
 };
 
 }  // namespace laser_segmentation

@@ -117,6 +117,19 @@ protected:
   double calculate_santos_threshold(const slg::Point2D & point1, const slg::Point2D & point2);
 
   /**
+   * @brief Hook invoked by perform_segmentation() right after a new segment has been
+   * started following a jump. The default implementation does nothing. Subclasses
+   * (e.g. JumpDistanceSegmentationMerge) may override it to merge the newly created
+   * segment into an earlier one, without having to duplicate the whole loop.
+   *
+   * @param segments The segments collected so far (not including current_segment).
+   * @param current_segment The segment that was just created; may be replaced/cleared.
+   */
+  virtual void on_segment_created(
+    std::vector<slg::Segment2D> & segments,
+    slg::Segment2D & current_segment);
+
+  /**
    * @brief The jump distance above which a new segment is created.
    *
    */

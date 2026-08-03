@@ -67,6 +67,8 @@ void JumpDistanceSegmentation::perform_segmentation(
       }
       // And create a new segment
       current_segment = slg::Segment2D(++count, prev_point, current_point, next_point);
+      // Give subclasses a chance to merge the new segment into a predecessor
+      on_segment_created(segments, current_segment);
     }
     // Prepare next iteration
     prev_point = current_point;
@@ -127,6 +129,13 @@ bool JumpDistanceSegmentation::is_jump_between(
   const slg::Segment2D & segment2)
 {
   return is_jump_between(segment1.last_point(), segment2.first_point());
+}
+
+void JumpDistanceSegmentation::on_segment_created(
+  std::vector<slg::Segment2D> & /*segments*/, slg::Segment2D & /*current_segment*/)
+{
+  // No-op by default; JumpDistanceSegmentationMerge overrides this hook to merge
+  // the new segment into an earlier predecessor when appropriate.
 }
 
 double JumpDistanceSegmentation::calculate_lee_threshold(
