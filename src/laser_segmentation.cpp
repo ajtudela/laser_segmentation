@@ -157,17 +157,21 @@ void LaserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
     segment_filtered_list[s].set_angular_distance_to_closest_boundary(angle);
   }
 
-  // Publish the segment array
-  slg_msgs::msg::SegmentArray segment_array_msg;
-  segment_array_msg.header = scan_msg->header;
-  for (const auto & segment : segment_filtered_list) {
-    segment_array_msg.segments.push_back(segment);
+  // Publish the segment array, only if there's a subscriber
+  if (segment_pub_->get_subscription_count() > 0) {
+    slg_msgs::msg::SegmentArray segment_array_msg;
+    segment_array_msg.header = scan_msg->header;
+    for (const auto & segment : segment_filtered_list) {
+      segment_array_msg.segments.push_back(segment);
+    }
+    segment_pub_->publish(segment_array_msg);
   }
-  segment_pub_->publish(segment_array_msg);
 
-  // Publish visualization markers
-  segment_viz_points_pub_->publish(
-    create_segment_viz_points(scan_msg->header, segment_filtered_list));
+  // Publish visualization markers, only if there's a subscriber
+  if (segment_viz_points_pub_->get_subscription_count() > 0) {
+    segment_viz_points_pub_->publish(
+      create_segment_viz_points(scan_msg->header, segment_filtered_list));
+  }
 }
 
 std::vector<slg::Segment2D> LaserSegmentation::filter_segments(
