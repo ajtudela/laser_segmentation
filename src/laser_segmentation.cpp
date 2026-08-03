@@ -257,11 +257,12 @@ visualization_msgs::msg::MarkerArray LaserSegmentation::create_segment_viz_point
     viz_centroids.id = i;
 
     // Change the color of the segment
-    viz_points.color = get_palette_color(i);
-    viz_centroids.color = get_palette_color(i);
+    const auto color = get_palette_color(i);
+    viz_points.color = color;
+    viz_centroids.color = color;
 
     // Iterate over the points of the segment
-    slg::Segment2D current_segment = segment_list[i];
+    const slg::Segment2D & current_segment = segment_list[i];
     for (const auto & point : current_segment.get_points()) {
       viz_points.points.push_back(point);
     }
