@@ -83,6 +83,9 @@ CallbackReturn LaserSegmentation::on_cleanup(const rclcpp_lifecycle::State & /*s
   segment_pub_.reset();
   segment_viz_points_pub_.reset();
   param_handler_.reset();
+  // params_ pointed into param_handler_'s internal state; null it out so any
+  // accidental post-cleanup use fails fast instead of dereferencing freed memory.
+  params_ = nullptr;
 
   return CallbackReturn::SUCCESS;
 }
