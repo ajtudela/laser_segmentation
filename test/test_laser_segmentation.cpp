@@ -175,14 +175,14 @@ INSTANTIATE_TEST_SUITE_P(
   LaserSegmentationColorTestSuite,
   LaserSegmentationColorTest,
   ::testing::Values(
-    LaserSegmentationColorParam{0, {1.0, 0.16078431, 0.16078431, 1.0}},
-    LaserSegmentationColorParam{1, {0.16078431, 1.0, 0.16078431, 1.0}},
-    LaserSegmentationColorParam{2, {1.0, 0.60, 0.16078431, 1.0}},
-    LaserSegmentationColorParam{3, {0.16078431, 1.0, 0.60, 1.0}},
-    LaserSegmentationColorParam{4, {1.0, 1.0, 0.16078431, 1.0}},
-    LaserSegmentationColorParam{5, {0.16078431, 0.60, 1.0, 1.0}},
-    LaserSegmentationColorParam{6, {0.60, 0.16078431, 0.16078431, 1.0}},
-    LaserSegmentationColorParam{7, {1.0, 0.16078431, 1.0, 1.0}}
+    LaserSegmentationColorParam{0, {1.0, 0.2, 0.2, 1.0}},
+    LaserSegmentationColorParam{1, {0.2, 1.0, 0.2, 1.0}},
+    LaserSegmentationColorParam{2, {1.0, 0.60, 0.2, 1.0}},
+    LaserSegmentationColorParam{3, {0.2, 1.0, 0.60, 1.0}},
+    LaserSegmentationColorParam{4, {1.0, 1.0, 0.2, 1.0}},
+    LaserSegmentationColorParam{5, {0.2, 0.60, 1.0, 1.0}},
+    LaserSegmentationColorParam{6, {0.60, 0.2, 0.2, 1.0}},
+    LaserSegmentationColorParam{7, {1.0, 0.2, 1.0, 1.0}}
 ));
 
 TEST(LaserSegmentationTest, createVizPoints) {

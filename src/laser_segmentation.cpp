@@ -282,14 +282,14 @@ std_msgs::msg::ColorRGBA LaserSegmentation::get_palette_color(unsigned int index
 {
   std_msgs::msg::ColorRGBA color;
   switch (index % 8) {
-    case 0: color.r = 255; color.g = 051; color.b = 051; break;
-    case 2: color.r = 255; color.g = 153; color.b = 051; break;
-    case 4: color.r = 255; color.g = 255; color.b = 051; break;
-    case 6: color.r = 153; color.g = 051; color.b = 051; break;
-    case 1: color.r = 051; color.g = 255; color.b = 051; break;
-    case 3: color.r = 051; color.g = 255; color.b = 153; break;
-    case 5: color.r = 051; color.g = 153; color.b = 255; break;
-    case 7: color.r = 255; color.g = 051; color.b = 255; break;
+    case 0: color.r = 255; color.g = 51;  color.b = 51;  break;
+    case 2: color.r = 255; color.g = 153; color.b = 51;  break;
+    case 4: color.r = 255; color.g = 255; color.b = 51;  break;
+    case 6: color.r = 153; color.g = 51;  color.b = 51;  break;
+    case 1: color.r = 51;  color.g = 255; color.b = 51;  break;
+    case 3: color.r = 51;  color.g = 255; color.b = 153; break;
+    case 5: color.r = 51;  color.g = 153; color.b = 255; break;
+    case 7: color.r = 255; color.g = 51;  color.b = 255; break;
   }
 
   color.r /= 255.0; color.g /= 255.0; color.b /= 255.0; color.a = 1.0;
