@@ -56,7 +56,9 @@ ParameterHandler::ParameterHandler(
   declare_parameter_if_not_declared(
     node, "min_avg_distance_from_sensor", rclcpp::ParameterValue(0.0),
     rcl_interfaces::msg::ParameterDescriptor()
-    .set__description("Minimium average distance from sensor")
+    .set__description(
+      "Minimum distance from the sensor to a segment's centroid "
+      "(not the average of each point's distance)")
     .set__floating_point_range(
       {rcl_interfaces::msg::FloatingPointRange()
         .set__from_value(0.0)
@@ -67,7 +69,9 @@ ParameterHandler::ParameterHandler(
   declare_parameter_if_not_declared(
     node, "max_avg_distance_from_sensor", rclcpp::ParameterValue(20.0),
     rcl_interfaces::msg::ParameterDescriptor()
-    .set__description("Maximum average distance from sensor")
+    .set__description(
+      "Maximum distance from the sensor to a segment's centroid "
+      "(not the average of each point's distance)")
     .set__floating_point_range(
       {rcl_interfaces::msg::FloatingPointRange()
         .set__from_value(0.0)

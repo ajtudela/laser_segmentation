@@ -142,7 +142,10 @@ void LaserSegmentation::scan_callback(const sensor_msgs::msg::LaserScan::SharedP
     phi += angle_resolution;
   }
 
-  // Segment the points
+  // Segment the points.
+  // Note: initialize_segmentation() is called on every scan even though the
+  // algorithm type itself is fixed at configure time; only its dynamic parameters
+  // (threshold, noise reduction, method) can change between scans.
   std::vector<slg::Segment2D> segment_list;
   segmentation_->initialize_segmentation(
     params_snapshot.distance_threshold, angle_resolution, params_snapshot.noise_reduction,
@@ -197,6 +200,8 @@ std::vector<slg::Segment2D> LaserSegmentation::filter_segments(
     }
 
     // By distance to sensor
+    // Note: this is the distance from the sensor to the segment's centroid, not the
+    // average of each point's distance to the sensor, despite the parameter names.
     if (segment.centroid().length() < params.min_avg_distance_from_sensor ||
       segment.centroid().length() > params.max_avg_distance_from_sensor)
     {

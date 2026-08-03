@@ -20,6 +20,9 @@
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
+  // LaserSegmentation is a lifecycle node: it starts unconfigured and does nothing
+  // until an external lifecycle manager (e.g. the provided launch file) drives it
+  // through configure/activate. Running this binary standalone will just spin idle.
   auto node = std::make_shared<laser_segmentation::LaserSegmentation>();
   rclcpp::spin(node->get_node_base_interface());
   rclcpp::shutdown();
